@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as GithubStrategy} from "passport-github2";
-import prisma from "../db/prisma";
+import prisma from "../db/prisma.js";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { ExtractJwt } from "passport-jwt";
 
