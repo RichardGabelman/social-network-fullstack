@@ -53,6 +53,7 @@ passport.use(
           id: true,
           username: true,
           displayName: true,
+          avatarUrl: true,
         },
       });
 
