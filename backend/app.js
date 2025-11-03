@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import apiRouter from "./src/routes/api.js";
 
 import "dotenv/config";
 
@@ -9,6 +10,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
+
+app.use("/api", apiRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
