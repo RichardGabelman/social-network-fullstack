@@ -1,23 +1,25 @@
 import express from "express";
 import prisma from "../db/prisma.js";
 import { isLoggedIn } from "../middlewares/authMiddleware.js";
-import { body, param, validationResult } from 'express-validator';
+import { body, param, validationResult } from "express-validator";
 
 const router = express.Router();
 
 const validatePost = [
-  body('content')
+  body("content")
     .trim()
-    .notEmpty().withMessage('Post content is required')
-    .isLength({ max: 500 }).withMessage('Post content must be 500 characters or less'),
-  body('replyToId')
+    .notEmpty()
+    .withMessage("Post content is required")
+    .isLength({ max: 500 })
+    .withMessage("Post content must be 500 characters or less"),
+  body("replyToId")
     .optional()
-    .isInt().withMessage('Reply ID must be a valid integer')
+    .isInt()
+    .withMessage("Reply ID must be a valid integer"),
 ];
 
 const validatePostId = [
-  param('postId')
-    .isInt().withMessage('Post ID must be a valid integer')
+  param("postId").isInt().withMessage("Post ID must be a valid integer"),
 ];
 
 const handleValidationErrors = (req, res, next) => {
@@ -28,48 +30,54 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
-router.post("/", isLoggedIn, validatePost, handleValidationErrors, async (req, res) => {
-  try {
-    const { content, replyToId } = req.body;
-    const authorId = req.user.id;
+router.post(
+  "/",
+  isLoggedIn,
+  validatePost,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { content, replyToId } = req.body;
+      const authorId = req.user.id;
 
-    if (replyToId) {
-      const parentPost = await prisma.post.findUnique({
-        where: { id: parseInt(replyToId) },
-      });
-      if (!parentPost) {
-        return res.status(404).json({ error: "Parent post not found" });
+      if (replyToId) {
+        const parentPost = await prisma.post.findUnique({
+          where: { id: parseInt(replyToId) },
+        });
+        if (!parentPost) {
+          return res.status(404).json({ error: "Parent post not found" });
+        }
       }
+
+      const post = await prisma.post.create({
+        data: {
+          content,
+          authorId,
+          replyToId: replyToId ? parseInt(replyToId) : null,
+        },
+        include: {
+          author: {
+            id: true,
+            username: true,
+            displayName: true,
+            avatarUrl: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            replies: true,
+          },
+        },
+      });
+
+      res.status(201).json(post);
+    } catch (error) {
+      console.log("Error creating post:", error);
+      res.status(500).json({ error: "Failed to create post" });
     }
-
-    const post = await prisma.post.create({
-      data: {
-        content,
-        authorId,
-        replyToId: replyToId ? parseInt(replyToId) : null,
-      },
-      include: {
-        author: {
-          id: true,
-          username: true,
-          displayName: true,
-          avatarUrl: true,
-        },
-      },
-      _count: {
-        select: {
-          likes: true,
-          replies: true,
-        },
-      },
-    });
-
-    res.status(201).json(post);
-  } catch (error) {
-    console.log("Error creating post:", error);
-    res.status(500).json({ error: "Failed to create post" });
   }
-});
+);
 
 router.get("/", isLoggedIn, async (req, res) => {
   try {
@@ -80,7 +88,7 @@ router.get("/", isLoggedIn, async (req, res) => {
       select: { followingId: true },
     });
 
-    const followingIds = following.map(f => f.followingId);
+    const followingIds = following.map((f) => f.followingId);
 
     // following + self posts
     const authorIds = [...followingIds, userId];
@@ -149,6 +157,93 @@ router.get("/", isLoggedIn, async (req, res) => {
     console.error("Error fetching feed:", error);
     res.status(500).json({ error: "Failed to fetch feed" });
   }
-})
+});
+
+router.get(
+  "/:postId",
+  isLoggedIn,
+  validatePostId,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const postId = parseInt(req.params.postId);
+
+      const post = await prisma.post.findUnique({
+        where: { id: postId },
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true,
+              displayName: true,
+              avatarUrl: true,
+            },
+          },
+          replyTo: {
+            select: {
+              id: true,
+              content: true,
+              isReplyToDeleted: true,
+              author: {
+                select: {
+                  username: true,
+                  displayName: true,
+                },
+              },
+            },
+          },
+          replies: {
+            include: {
+              author: {
+                select: {
+                  id: true,
+                  username: true,
+                  displayName: true,
+                  avatarUrl: true,
+                },
+              },
+              _count: {
+                select: {
+                  likes: true,
+                  replies: true,
+                },
+              },
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              replies: true,
+            },
+          },
+        },
+      });
+
+      if (!post) {
+        return res.status(404).json({ error: "Post not found" });
+      }
+
+      const like = await prisma.like.findUnique({
+        where: {
+          userId_postId: {
+            userId: req.user.id,
+            postId: post.id,
+          },
+        },
+      });
+
+      res.json({
+        ...post,
+        isLiked: like !== null,
+      });
+    } catch (error) {
+      console.error("Error fetching post:", error);
+      res.status(500).json({ error: "Failed to fetch post" });
+    }
+  }
+);
 
 export default router;
