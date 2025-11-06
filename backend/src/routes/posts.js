@@ -22,6 +22,10 @@ const validatePostId = [
   param("postId").isInt().withMessage("Post ID must be a valid integer"),
 ];
 
+const validateUserId = [
+  param("userId").isInt().withMessage("User ID must be a valid integer"),
+];
+
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -242,6 +246,46 @@ router.get(
     } catch (error) {
       console.error("Error fetching post:", error);
       res.status(500).json({ error: "Failed to fetch post" });
+    }
+  }
+);
+
+router.get(
+  "/user/:userId",
+  isLoggedIn,
+  validateUserId,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+
+      const posts = await prisma.post.findMany({
+        where: { authorId: userId },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          author: {
+            select: {
+              id: true,
+              username: true,
+              displayName: true,
+              avatarUrl: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              replies: true,
+            },
+          },
+        },
+      });
+
+      res.json(posts);
+    } catch (error) {
+      console.error("Error fetching user posts:", error);
+      res.status(500).json({ error: "Failed to fetch user posts" });
     }
   }
 );
