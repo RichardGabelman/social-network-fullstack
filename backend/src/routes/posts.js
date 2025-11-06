@@ -4,6 +4,7 @@ import { isLoggedIn } from "../middlewares/authMiddleware.js";
 import { body, param, validationResult } from "express-validator";
 
 const PRISMA_UNIQUE_CONSTRAINT_ERROR = "P2002";
+const PRISMA_NOT_FOUND_ERROR = "P2025";
 
 const router = express.Router();
 
@@ -292,68 +293,112 @@ router.get(
   }
 );
 
-router.delete("/:postId", isLoggedIn, validatePostId, handleValidationErrors, async (req, res) => {
-  try {
-    const postId = parseInt(req.params.postId);
-    const userId = req.user.id;
+router.delete(
+  "/:postId",
+  isLoggedIn,
+  validatePostId,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const postId = parseInt(req.params.postId);
+      const userId = req.user.id;
 
-    const post = await prisma.post.findUnique({
-      where: { id: postId },
-    });
-
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
-    if (post.authorId !== userId) {
-      return res.status(403).json({ error: "You can only delete your own posts" });
-    }
-
-    await prisma.$transaction([
-      prisma.post.updateMany({
-        where: { replyToId: postId },
-        data: { isReplyToDeleted: true },
-      }),
-      prisma.post.delete({
+      const post = await prisma.post.findUnique({
         where: { id: postId },
-      }),
-    ]);
+      });
 
-    res.status(204).send();
-  } catch (error) {
-    console.error("Error deleting post:", error);
-    res.status(500).json({ error: "Failed to delete post" });
-  }
-});
+      if (!post) {
+        return res.status(404).json({ error: "Post not found" });
+      }
 
-router.post("/:postId/like", isLoggedIn, validatePostId, handleValidationErrors, async (req, res) => {
-  try {
-    const postId = parseInt(req.params.postId);
-    const userId = req.user.id;
+      if (post.authorId !== userId) {
+        return res
+          .status(403)
+          .json({ error: "You can only delete your own posts" });
+      }
 
-    const post = await prisma.post.findUnique({
-      where: { id: postId },
-    });
+      await prisma.$transaction([
+        prisma.post.updateMany({
+          where: { replyToId: postId },
+          data: { isReplyToDeleted: true },
+        }),
+        prisma.post.delete({
+          where: { id: postId },
+        }),
+      ]);
 
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      res.status(500).json({ error: "Failed to delete post" });
     }
-
-    const like = await prisma.like.create({
-      data: {
-        userId,
-        postId,
-      },
-    });
-
-    res.status(201).json(like);
-  } catch (error) {
-    if (error.code === PRISMA_UNIQUE_CONSTRAINT_ERROR) {
-      return res.status(400).json({ error: "You already liked this post" });
-    }
-    console.error("Error liking post:", error);
-    res.status(500).json({ error: "Failed to like post" });
   }
-});
+);
+
+router.post(
+  "/:postId/like",
+  isLoggedIn,
+  validatePostId,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const postId = parseInt(req.params.postId);
+      const userId = req.user.id;
+
+      const post = await prisma.post.findUnique({
+        where: { id: postId },
+      });
+
+      if (!post) {
+        return res.status(404).json({ error: "Post not found" });
+      }
+
+      const like = await prisma.like.create({
+        data: {
+          userId,
+          postId,
+        },
+      });
+
+      res.status(201).json(like);
+    } catch (error) {
+      if (error.code === PRISMA_UNIQUE_CONSTRAINT_ERROR) {
+        return res.status(400).json({ error: "You already liked this post" });
+      }
+      console.error("Error liking post:", error);
+      res.status(500).json({ error: "Failed to like post" });
+    }
+  }
+);
+
+router.delete(
+  "/:postId/like",
+  isLoggedIn,
+  validatePostId,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const postId = parseInt(req.params.postId);
+      const userId = req.user.id;
+
+      await prisma.like.delete({
+        where: {
+          userId_postId: {
+            userId,
+            postId,
+          },
+        },
+      });
+
+      res.status(204).send();
+    } catch (error) {
+      if (error.code === PRISMA_NOT_FOUND_ERROR) {
+        return res.status(404).json({ error: "Like not found" });
+      }
+      console.error("Error unliking post:", error);
+      res.status(500).json({ error: "Failed to unlike post" });
+    }
+  }
+);
 
 export default router;
