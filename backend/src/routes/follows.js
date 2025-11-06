@@ -1,7 +1,9 @@
 import express from "express";
-import passport from "../config/passport.js";
 import prisma from "../db/prisma.js";
 import { isLoggedIn } from "../middlewares/authMiddleware.js";
+
+const PRISMA_UNIQUE_CONSTRAINT_ERROR = "P2002";
+const PRISMA_NOT_FOUND_ERROR = "P2025";
 
 const router = express.Router();
 
@@ -31,7 +33,7 @@ router.post("/:userId", isLoggedIn, async (req, res) => {
 
     res.status(201).json(follow);
   } catch (error) {
-    if (error.code === "P2002") {
+    if (error.code === PRISMA_UNIQUE_CONSTRAINT_ERROR) {
       return res.status(400).json({ error: "Already following this user" });
     }
     res.status(500).json({ error: "Failed to follow user" });
@@ -54,7 +56,7 @@ router.delete("/:userId", isLoggedIn, async (req, res) => {
 
     res.status(204).send();
   } catch (error) {
-    if (error.code === "P2025") {
+    if (error.code === PRISMA_NOT_FOUND_ERROR) {
       return res.status(404).json({ error: "Follow relationship not found" });
     }
     res.status(500).json({ error: "Failed to unfollow user" });
