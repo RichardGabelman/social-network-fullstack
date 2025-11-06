@@ -3,6 +3,8 @@ import prisma from "../db/prisma.js";
 import { isLoggedIn } from "../middlewares/authMiddleware.js";
 import { body, param, validationResult } from "express-validator";
 
+const PRISMA_UNIQUE_CONSTRAINT_ERROR = "P2002";
+
 const router = express.Router();
 
 const validatePost = [
@@ -321,6 +323,36 @@ router.delete("/:postId", isLoggedIn, validatePostId, handleValidationErrors, as
   } catch (error) {
     console.error("Error deleting post:", error);
     res.status(500).json({ error: "Failed to delete post" });
+  }
+});
+
+router.post("/:postId/like", isLoggedIn, validatePostId, handleValidationErrors, async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    const userId = req.user.id;
+
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    const like = await prisma.like.create({
+      data: {
+        userId,
+        postId,
+      },
+    });
+
+    res.status(201).json(like);
+  } catch (error) {
+    if (error.code === PRISMA_UNIQUE_CONSTRAINT_ERROR) {
+      return res.status(400).json({ error: "You already liked this post" });
+    }
+    console.error("Error liking post:", error);
+    res.status(500).json({ error: "Failed to like post" });
   }
 });
 
