@@ -71,4 +71,84 @@ router.post("/", isLoggedIn, validatePost, handleValidationErrors, async (req, r
   }
 });
 
+router.get("/", isLoggedIn, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const following = await prisma.follows.findMany({
+      where: { followerId: userId },
+      select: { followingId: true },
+    });
+
+    const followingIds = following.map(f => f.followingId);
+
+    // following + self posts
+    const authorIds = [...followingIds, userId];
+
+    const posts = await prisma.post.findMany({
+      where: {
+        authorId: {
+          in: authorIds,
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+            displayName: true,
+            avatarUrl: true,
+          },
+        },
+        replyTo: {
+          select: {
+            id: true,
+            content: true,
+            isReplyToDeleted: true,
+            author: {
+              select: {
+                username: true,
+                displayName: true,
+              },
+            },
+          },
+        },
+      },
+      _count: {
+        select: {
+          likes: true,
+          replies: true,
+        },
+      },
+      take: 50,
+    });
+
+    const postsWithLikeStatus = await Promise.all(
+      posts.map(async (post) => {
+        const like = await prisma.like.findUnique({
+          where: {
+            userId_postId: {
+              userId: req.user.id,
+              postId: post.id,
+            },
+          },
+        });
+
+        return {
+          ...post,
+          isLiked: like !== null,
+        };
+      })
+    );
+
+    res.json(postsWithLikeStatus);
+  } catch (error) {
+    console.error("Error fetching feed:", error);
+    res.status(500).json({ error: "Failed to fetch feed" });
+  }
+})
+
 export default router;
