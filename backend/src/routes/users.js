@@ -36,9 +36,11 @@ router.get("/", isLoggedIn, async (req, res) => {
       select: { followingId: true },
     });
 
-    const followingIds = new Set(followingRelationships.map(f => f.followingId));
+    const followingIds = new Set(
+      followingRelationships.map((f) => f.followingId)
+    );
 
-    const usersWithFollowStatus = users.map(user => ({
+    const usersWithFollowStatus = users.map((user) => ({
       ...user,
       isFollowing: followingIds.has(user.id),
     }));
