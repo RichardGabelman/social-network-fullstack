@@ -164,39 +164,86 @@ router.get(
   }
 );
 
-router.get("/:username/followers", isLoggedIn, validateUsername, handleValidationErrors, async (req, res) => {
-  try {
-    const { username } = req.params;
+router.get(
+  "/:username/followers",
+  isLoggedIn,
+  validateUsername,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { username } = req.params;
 
-    const user = await prisma.user.findUnique({
-      where: { username },
-      select: { id: true },
-    });
+      const user = await prisma.user.findUnique({
+        where: { username },
+        select: { id: true },
+      });
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-    const followers = await prisma.follows.findMany({
-      where: { followingId: user.id },
-      include: {
-        follower: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarUrl: true,
-            bio: true,
+      const followers = await prisma.follows.findMany({
+        where: { followingId: user.id },
+        include: {
+          follower: {
+            select: {
+              id: true,
+              username: true,
+              displayName: true,
+              avatarUrl: true,
+              bio: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    res.status(200).json(followers.map(f => f.follower));
-  } catch (error) {
-    console.error("Error fetching followers:", error);
-    res.status(500).json({ error: "Failed to fetch followers" });
+      res.status(200).json(followers.map((f) => f.follower));
+    } catch (error) {
+      console.error("Error fetching followers:", error);
+      res.status(500).json({ error: "Failed to fetch followers" });
+    }
   }
-});
+);
+
+router.get(
+  "/:username/following",
+  isLoggedIn,
+  validateUsername,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { username } = req.params;
+
+      const user = await prisma.user.findUnique({
+        where: { username },
+        select: { id: true },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const following = await prisma.follows.findMany({
+        where: { followerId: user.id },
+        include: {
+          following: {
+            select: {
+              id: true,
+              username: true,
+              displayName: true,
+              avatarUrl: true,
+              bio: true,
+            },
+          },
+        },
+      });
+
+      res.status(200).json(following.map((f) => f.following));
+    } catch (error) {
+      console.error("Error fetching following:", error);
+      res.status(500).json({ error: "Failed to fetch following" });
+    }
+  }
+);
 
 export default router;
