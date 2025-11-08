@@ -401,4 +401,36 @@ router.delete(
   }
 );
 
+router.get('/explore', isLoggedIn, async (req, res) => {
+  try {
+    const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+            displayName: true,
+            avatarUrl: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            replies: true,
+          },
+        },
+      },
+      take: 50,
+    });
+
+    res.json(posts);
+  } catch (error) {
+    console.error('Error fetching explore posts:', error);
+    res.status(500).json({ error: 'Failed to fetch posts' });
+  }
+});
+
 export default router;
