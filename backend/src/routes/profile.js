@@ -1,8 +1,35 @@
 import express from "express";
 import prisma from "../db/prisma.js";
 import { isLoggedIn } from "../middlewares/authMiddleware.js";
+import { body, param, validationResult } from 'express-validator';
 
 const router = express.Router();
+
+const validateProfileUpdate = [
+  body('displayName')
+    .optional()
+    .trim()
+    .notEmpty().withMessage('Display name cannot be empty')
+    .isLength({ max: 50 }).withMessage('Display name must be 50 characters or less'),
+  body('bio')
+    .optional()
+    .trim()
+    .isLength({ max: 150 }).withMessage('Bio must be 150 characters or less'),
+];
+
+const validateUsername = [
+  param('username')
+    .trim()
+    .notEmpty().withMessage('Username is required'),
+];
+
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
 
 router.get("/me", isLoggedIn, async (req, res) => {
   try {
@@ -32,6 +59,38 @@ router.get("/me", isLoggedIn, async (req, res) => {
   } catch (error) {
     console.error("Error fetching current user profile:", error);
     res.status(500).json({ error: "Failed to fetch profile" });
+  }
+});
+
+router.patch("/me", isLoggedIn, validateProfileUpdate, handleValidationErrors, async (req, res) => {
+  try {
+    const { displayName, bio } = req.body;
+    const userId = req.user.id;
+
+    const updateData = {};
+    if (displayName !== undefined) {
+      updateData.displayName = displayName;
+    }
+    if (bio !== undefined) {
+      updateData.bio = bio || null;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+      select: {
+        id: true,
+        username: true,
+        displayName: true,
+        bio: true,
+        avatarUrl: true,
+      },
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ error: "Failed to update profile" });
   }
 });
 
