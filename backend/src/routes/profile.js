@@ -1,26 +1,27 @@
 import express from "express";
 import prisma from "../db/prisma.js";
 import { isLoggedIn } from "../middlewares/authMiddleware.js";
-import { body, param, validationResult } from 'express-validator';
+import { body, param, validationResult } from "express-validator";
 
 const router = express.Router();
 
 const validateProfileUpdate = [
-  body('displayName')
+  body("displayName")
     .optional()
     .trim()
-    .notEmpty().withMessage('Display name cannot be empty')
-    .isLength({ max: 50 }).withMessage('Display name must be 50 characters or less'),
-  body('bio')
+    .notEmpty()
+    .withMessage("Display name cannot be empty")
+    .isLength({ max: 50 })
+    .withMessage("Display name must be 50 characters or less"),
+  body("bio")
     .optional()
     .trim()
-    .isLength({ max: 150 }).withMessage('Bio must be 150 characters or less'),
+    .isLength({ max: 150 })
+    .withMessage("Bio must be 150 characters or less"),
 ];
 
 const validateUsername = [
-  param('username')
-    .trim()
-    .notEmpty().withMessage('Username is required'),
+  param("username").trim().notEmpty().withMessage("Username is required"),
 ];
 
 const handleValidationErrors = (req, res, next) => {
@@ -62,36 +63,105 @@ router.get("/me", isLoggedIn, async (req, res) => {
   }
 });
 
-router.patch("/me", isLoggedIn, validateProfileUpdate, handleValidationErrors, async (req, res) => {
-  try {
-    const { displayName, bio } = req.body;
-    const userId = req.user.id;
+router.patch(
+  "/me",
+  isLoggedIn,
+  validateProfileUpdate,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { displayName, bio } = req.body;
+      const userId = req.user.id;
 
-    const updateData = {};
-    if (displayName !== undefined) {
-      updateData.displayName = displayName;
+      const updateData = {};
+      if (displayName !== undefined) {
+        updateData.displayName = displayName;
+      }
+      if (bio !== undefined) {
+        updateData.bio = bio || null;
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+        select: {
+          id: true,
+          username: true,
+          displayName: true,
+          bio: true,
+          avatarUrl: true,
+        },
+      });
+
+      res.json(updatedUser);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      res.status(500).json({ error: "Failed to update profile" });
     }
-    if (bio !== undefined) {
-      updateData.bio = bio || null;
-    }
-
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: updateData,
-      select: {
-        id: true,
-        username: true,
-        displayName: true,
-        bio: true,
-        avatarUrl: true,
-      },
-    });
-
-    res.json(updatedUser);
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    res.status(500).json({ error: "Failed to update profile" });
   }
-});
+);
+
+router.get(
+  "/:username",
+  isLoggedIn,
+  validateUsername,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { username } = req.params;
+      const currentUserId = req.user.id;
+
+      const user = await prisma.user.findUnique({
+        where: { username },
+        select: {
+          id: true,
+          username: true,
+          displayName: true,
+          bio: true,
+          avatarUrl: true,
+          _count: {
+            select: {
+              posts: true,
+              followers: true,
+              following: true,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const isFollowing = await prisma.follows.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: currentUserId,
+            followingId: user.id,
+          },
+        },
+      });
+
+      const followsYou = await prisma.follows.findUnique({
+        where: {
+          followerId_followingId: {
+            followerId: user.id,
+            followingId: currentUserId,
+          },
+        },
+      });
+
+      res.status(200).json({
+        ...user,
+        isFollowing: isFollowing !== null,
+        followsYou: followsYou !== null,
+        isOwnProfile: user.id === currentUserId,
+      });
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      res.status(500).json({ error: "Failed to fetch profile" });
+    }
+  }
+);
 
 export default router;
