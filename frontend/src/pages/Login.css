@@ -3,26 +3,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6;
 }
 
 .login-card {
-  background-color: white;
+  background-color: #181818;
   padding: 2rem;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.login-title {
-  background-color: #1f2937;
+.github-button {
+  border: 1px solid white;
+  padding: 0.6rem 1.8rem;
+  background-color: #181818;
   color: white;
-  padding: 0.5rem 1.5rem;
-  border-radius: 0.25rem;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  margin-top: 1.2rem;
 }
 
 .github-button:hover {
-  background-color: #374151;
+  background-color: #272727;
 }
