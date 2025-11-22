@@ -41,8 +41,8 @@ function Layout({
   return (
     <div className="layout">
       <nav className="nav-menu">
-        <Link to="/">
-          <div className="logo">
+        <Link to="/" className="logo">
+          <div>
             <h2>TC</h2>
           </div>
         </Link>
