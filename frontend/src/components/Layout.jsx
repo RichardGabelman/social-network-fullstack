@@ -97,7 +97,7 @@ function Layout({
           {showFeedSelector && (
             <div className="feed-selector">
               <button 
-                className={`feed-option ${selectedFeed === 'following' ? 'active' : ''}`}
+                className={`feed-option ${selectedFeed === 'following' ? 'explore' : ''}`}
                 onClick={() => onFeedChange('following')}
               >
                 TBD
