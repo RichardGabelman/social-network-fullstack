@@ -62,3 +62,18 @@ main {
   border-radius: 16px;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 6px 8px 0px;
 }
+
+.logout-button {
+  background-color: inherit;
+  color: rgb(77, 77, 77);
+  border: none;
+  margin-bottom: 22px;
+  width: 48px;
+  height: 53px;
+}
+
+.logout-button:hover {
+  color: rgb(243, 245, 247);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}

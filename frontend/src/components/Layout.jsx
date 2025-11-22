@@ -81,7 +81,7 @@ function Layout({
           )}
         </div>
         <button onClick={handleLogout} className="logout-button">
-          Logout
+          Sign Out
         </button>
       </nav>
 
