@@ -16,6 +16,7 @@
 .nav-center-bundle {
   display: flex;
   flex-direction: column;
+  gap: 4px;
 }
 
 .nav-item {
@@ -24,6 +25,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 12px;
+  font-size: 36px;
+  border: none;
+  text-decoration: none;
+}
+
+.nav-new-post-button {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgb(77, 77, 77);
+}
+
+.nav-new-post-button:hover {
+  color: rgb(243, 245, 247); 
 }
 
 .nav-item:hover {

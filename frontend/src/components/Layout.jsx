@@ -61,6 +61,12 @@ function Layout({
           >
             <span className="nav-icon">🔎</span>
           </Link>
+          <button className="nav-new-post-button nav-item" onClick={() => showNewPost(true)}>
+            +
+          </button>
+          <Link to="/" className={`nav-item ${location.pathname === "/" ? "active" : ""}`}>
+            💖
+          </Link>
           {currentUser && (
             <Link
               to={`/profile/${currentUser.username}`}
