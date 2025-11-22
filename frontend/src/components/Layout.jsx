@@ -40,47 +40,44 @@ function Layout({
 
   return (
     <div className="layout">
-      <aside className="sidebar">
-        <div className="sidebar-content">
+      <nav className="nav-menu">
+        <Link to="/">
           <div className="logo">
             <h2>TC</h2>
           </div>
-
-          <nav className="nav-menu">
+        </Link>
+        <div className="nav-center-bundle">
+          <Link
+            to="/"
+            className={`nav-item ${location.pathname === "/" ? "active" : ""}`}
+          >
+            <span className="nav-icon">🏠</span>
+          </Link>
+          <Link
+            to="/users"
+            className={`nav-item ${
+              location.pathname === "/users" ? "active" : ""
+            }`}
+          >
+            <span className="nav-icon">🔎</span>
+          </Link>
+          {currentUser && (
             <Link
-              to="/"
+              to={`/profile/${currentUser.username}`}
               className={`nav-item ${
-                location.pathname === "/" ? "active" : ""
+                location.pathname === `/profile/${currentUser.username}`
+                  ? "active"
+                  : ""
               }`}
             >
-              <span className="nav-item">🏠</span>
+              <span className="nav-icon">👤</span>
             </Link>
-            <Link
-              to="/users"
-              className={`nav-item ${
-                location.pathname === "/users" ? "active" : ""
-              }`}
-            >
-              <span className="nav-icon">🔎</span>
-            </Link>
-            {currentUser && (
-              <Link
-                to={`/profile/${currentUser.username}`}
-                className={`nav-item ${
-                  location.pathname === `/profile/${currentUser.username}`
-                    ? "active"
-                    : ""
-                }`}
-              >
-                <span className="nav-icon">👤</span>
-              </Link>
-            )}
-          </nav>
-          <button onClick={handleLogout} className="logout-button">
-            Logout
-          </button>
+          )}
         </div>
-      </aside>
+        <button onClick={handleLogout} className="logout-button">
+          Logout
+        </button>
+      </nav>
 
       <main className="main-content">
         <header className="top-header">
@@ -96,9 +93,11 @@ function Layout({
 
           {showFeedSelector && (
             <div className="feed-selector">
-              <button 
-                className={`feed-option ${selectedFeed === 'following' ? 'explore' : ''}`}
-                onClick={() => onFeedChange('following')}
+              <button
+                className={`feed-option ${
+                  selectedFeed === "following" ? "active" : ""
+                }`}
+                onClick={() => onFeedChange("following")}
               >
                 TBD
               </button>
@@ -106,13 +105,11 @@ function Layout({
           )}
         </header>
 
-        <div className="content">
-          {children}
-        </div>
+        <div className="content">{children}</div>
       </main>
 
       <button className="new-post-button" onClick={() => showNewPost(true)}>
-          +
+        +
       </button>
     </div>
   );
