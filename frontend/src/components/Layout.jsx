@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { authService, profileService } from "../services/api.js";
+import NewPostModal from "./NewPostModal.jsx";
 import "./Layout.css";
 
 function Layout({
@@ -13,8 +14,9 @@ function Layout({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showNewPost, setShowNewPost] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [showCenteredModal, setShowCenteredModal] = useState(false);
+  const [showFloatingModal, setShowFloatingModal] = useState(false);
 
   useEffect(() => {
     loadCurrentUser();
@@ -61,7 +63,7 @@ function Layout({
           >
             <span className="nav-icon">🔎</span>
           </Link>
-          <button className="nav-new-post-button nav-item" onClick={() => showNewPost(true)}>
+          <button className="nav-new-post-button nav-item" onClick={() => setShowCenteredModal(!showCenteredModal)}>
             +
           </button>
           <Link to="/" className={`nav-item ${location.pathname === "/" ? "active" : ""}`}>
@@ -114,9 +116,12 @@ function Layout({
         <div className="content">{children}</div>
       </main>
 
-      <button className="new-post-button" onClick={() => showNewPost(true)}>
+      <button className="new-post-button" onClick={() => setShowFloatingModal(!showFloatingModal)}>
         +
       </button>
+
+      <NewPostModal isOpen={showFloatingModal} onClose={() => setShowFloatingModal(false)} variant="floating" />
+      <NewPostModal isOpen={showCenteredModal} onClose={() => setShowCenteredModal(false)} variant="centered" />
     </div>
   );
 }
