@@ -21,6 +21,8 @@ const fetchWithAuth = async (url, options = {}) => {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
+    console.error("API Error Response:", error);
+    console.error('API Error Response:', JSON.stringify(error, null, 2));
     throw new Error(error.error || `HTTP error! status:${response.status}`);
   }
 
@@ -82,9 +84,15 @@ export const profileService = {
 
 export const postService = {
   createPost: async (content, replyToId = null) => {
+    const body = { content };
+
+    if (replyToId) {
+      body.replyToId = replyToId;
+    }
+
     return fetchWithAuth("/posts", {
       method: "POST",
-      body: JSON.stringify({ content, replyToId }),
+      body: JSON.stringify(body),
     });
   },
 
