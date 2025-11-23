@@ -45,7 +45,7 @@ function NewPostModal({ isOpen, onClose, variant = "centered" }) {
         </div>
         <textarea
           placeholder="What's new?"
-          rows="6"
+          rows="4"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -54,15 +54,13 @@ function NewPostModal({ isOpen, onClose, variant = "centered" }) {
         />
         <div className="modal-footer">
           <span className="char-count">{content.length}/500</span>
-          <div className="modal-actions">
-            <button
-              className="primary"
-              onClick={handleSubmit}
-              disabled={!content.trim() || isSubmitting}
-            >
-              {isSubmitting ? "Posting..." : "Post"}
-            </button>
-          </div>
+          <button
+            className="primary"
+            onClick={handleSubmit}
+            disabled={!content.trim() || isSubmitting}
+          >
+            {isSubmitting ? "Posting..." : "Post"}
+          </button>
         </div>
       </div>
     </>
