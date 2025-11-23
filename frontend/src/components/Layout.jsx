@@ -63,10 +63,16 @@ function Layout({
           >
             <span className="nav-icon">🔎</span>
           </Link>
-          <button className="nav-new-post-button nav-item" onClick={() => setShowCenteredModal(!showCenteredModal)}>
+          <button
+            className="nav-new-post-button nav-item"
+            onClick={() => setShowCenteredModal(!showCenteredModal)}
+          >
             +
           </button>
-          <Link to="/" className={`nav-item ${location.pathname === "/" ? "active" : ""}`}>
+          <Link
+            to="/"
+            className={`nav-item ${location.pathname === "/" ? "active" : ""}`}
+          >
             💖
           </Link>
           {currentUser && (
@@ -89,39 +95,54 @@ function Layout({
 
       <main className="main-content">
         <header className="top-header">
-          {showBackButton && (
-            <button className="back-button" onClick={handleBack}>
-              ←
-            </button>
-          )}
-
-          {title && !showFeedSelector && (
-            <h1 className="page-title">{title}</h1>
-          )}
-
-          {showFeedSelector && (
-            <div className="feed-selector">
-              <button
-                className={`feed-option ${
-                  selectedFeed === "following" ? "active" : ""
-                }`}
-                onClick={() => onFeedChange("following")}
-              >
-                TBD
+          <div className="header-left">
+            {showBackButton && (
+              <button className="back-button" onClick={handleBack}>
+                ←
               </button>
-            </div>
-          )}
+            )}
+          </div>
+          <div className="header-center">
+            {title && (
+              <h1 className="page-title">{title}</h1>
+            )}
+
+            {showFeedSelector && (
+              <div className="feed-selector">
+                <button
+                  className={`feed-option ${
+                    selectedFeed === "following" ? "active" : ""
+                  }`}
+                  onClick={() => onFeedChange("following")}
+                >
+                  ↓
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="header-right"></div>
         </header>
 
         <div className="content">{children}</div>
       </main>
 
-      <button className="new-post-button" onClick={() => setShowFloatingModal(!showFloatingModal)}>
+      <button
+        className="new-post-button"
+        onClick={() => setShowFloatingModal(!showFloatingModal)}
+      >
         +
       </button>
 
-      <NewPostModal isOpen={showFloatingModal} onClose={() => setShowFloatingModal(false)} variant="floating" />
-      <NewPostModal isOpen={showCenteredModal} onClose={() => setShowCenteredModal(false)} variant="centered" />
+      <NewPostModal
+        isOpen={showFloatingModal}
+        onClose={() => setShowFloatingModal(false)}
+        variant="floating"
+      />
+      <NewPostModal
+        isOpen={showCenteredModal}
+        onClose={() => setShowCenteredModal(false)}
+        variant="centered"
+      />
     </div>
   );
 }
