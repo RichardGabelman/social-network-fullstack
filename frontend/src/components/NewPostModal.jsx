@@ -35,7 +35,7 @@ function NewPostModal({ isOpen, onClose, variant = "centered" }) {
       {variant === "centered" && (
         <div className="modal-overlay" onClick={onClose} />
       )}
-      <div className={`modal ${variant}`} onClick={(e) => e.stopPropagation()}>
+      <form className={`modal ${variant}`} onSubmit={handleSubmit}>
         <div className="modal-header">
           <button className="cancel-button" onClick={onClose}>
             {variant === "centered" ? "Cancel" : "✕"}
@@ -55,6 +55,7 @@ function NewPostModal({ isOpen, onClose, variant = "centered" }) {
         <div className="modal-footer">
           <span className="char-count">{content.length}/500</span>
           <button
+            type="submit"
             className="primary"
             onClick={handleSubmit}
             disabled={!content.trim() || isSubmitting}
@@ -62,7 +63,7 @@ function NewPostModal({ isOpen, onClose, variant = "centered" }) {
             {isSubmitting ? "Posting..." : "Post"}
           </button>
         </div>
-      </div>
+      </form>
     </>
   );
 }
