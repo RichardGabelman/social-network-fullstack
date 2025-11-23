@@ -16,24 +16,28 @@
 .nav-center-bundle {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
 }
 
 .nav-item {
   width: 60px;
-  height: 60px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  font-size: 36px;
+  font-size: 28px;
   border: none;
   text-decoration: none;
+  text-align: center;
 }
 
 .nav-new-post-button {
   background-color: rgba(255, 255, 255, 0.08);
   color: rgb(77, 77, 77);
+  width: 60px;
+  height: 48px;
+  font-size: 40px;
 }
 
 .nav-new-post-button:hover {
@@ -61,6 +65,13 @@ main {
   cursor: pointer;
   border-radius: 16px;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 6px 8px 0px;
+}
+
+.new-post-button:hover {
+  width: 90px;
+  height: 74px;
+  right: 15px;
+  bottom: 16px;
 }
 
 .logout-button {
