@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { postService } from "../services/api.js";
+import { postService, profileService } from "../services/api.js";
 import Layout from "../components/Layout.jsx";
 import NewPostModal from "../components/NewPostModal.jsx";
 import PostCard from "../components/PostCard.jsx";
+import Avatar from "../components/Avatar.jsx";
 import "./Home.css";
 
 function Home() {
@@ -11,10 +12,21 @@ function Home() {
   const [error, setError] = useState(null);
   const [selectedFeed, setSelectedFeed] = useState("following");
   const [showNewPostModal, setShowNewPostModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     loadFeed();
+    loadCurrentUser();
   }, [selectedFeed]);
+
+  const loadCurrentUser = async () => {
+    try {
+      const user = await profileService.getCurrentProfile();
+      setCurrentUser(user);
+    } catch (error) {
+      console.error("Error loading current user:", error);
+    }
+  };
 
   const loadFeed = async () => {
     try {
@@ -70,7 +82,10 @@ function Home() {
         onClick={() => setShowNewPostModal(true)}
       >
         <div className="trigger-content">
-          <span className="trigger-placeholder">What's new?</span>
+          <div className="trigger-left">
+            <Avatar src={currentUser.avatarUrl} alt={currentUser.username} size="medium"/>
+            <span className="trigger-placeholder">What's new?</span>
+          </div>
           <button
             type="button"
             className="trigger-post-button"
