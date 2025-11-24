@@ -1,0 +1,27 @@
+.new-post-trigger {
+  padding: 1rem 1.5rem;
+  padding-top: 1.5rem;
+  border-bottom: var(--border-primary);
+}
+
+.trigger-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.trigger-content span {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+}
+
+.trigger-post-button {
+  color: var(--color-text-primary);
+  background-color: var(--color-content-background);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.625rem;
+  border: var(--border-primary);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}

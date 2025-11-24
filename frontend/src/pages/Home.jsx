@@ -70,6 +70,13 @@ function Home() {
       >
         <div className="trigger-content">
           <span className="trigger-placeholder">What's new?</span>
+          <button
+            type="button"
+            className="trigger-post-button"
+            onClick={() => setShowNewPostModal(true)}
+          >
+            Post
+          </button>
         </div>
       </div>
       <div className="posts-container">
