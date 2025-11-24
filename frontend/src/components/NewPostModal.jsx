@@ -44,6 +44,8 @@ function NewPostModal({ isOpen, onClose, variant = "centered" }) {
           <div className="modal-header-spacer"></div>
         </div>
         <textarea
+          name="content"
+          id="post-content"
           placeholder="What's new?"
           rows="4"
           value={content}
@@ -51,6 +53,8 @@ function NewPostModal({ isOpen, onClose, variant = "centered" }) {
           onKeyDown={handleKeyDown}
           autoFocus
           maxLength={500}
+          required
+          aria-label="Post content"
         />
         <div className="modal-footer">
           <span className="char-count">{content.length}/500</span>
