@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { postService } from "../services/api.js";
 import Layout from "../components/Layout.jsx";
-import "./Home.css";
 import NewPostModal from "../components/NewPostModal.jsx";
+import PostCard from "../components/PostCard.jsx";
+import "./Home.css";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -90,9 +91,7 @@ function Home() {
           </div>
         ) : (
           posts.map((post) => (
-            <div key={post.id} className="post-card">
-              post (placeholder)
-            </div>
+            <PostCard key={post.id} post={post} onPostUpdate={loadFeed} />
           ))
         )}
       </div>
