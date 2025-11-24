@@ -141,6 +141,7 @@ main {
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
+  padding: 0.25rem;
 }
 
 .feed-selector button {

@@ -1,6 +1,6 @@
 .new-post-trigger {
   padding: 1rem 1.5rem;
-  padding-top: 1.5rem;
+  padding-top: 1.4rem;
   border-bottom: var(--border-primary);
 }
 
@@ -11,7 +11,7 @@
 }
 
 .trigger-content span {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.4);
   font-size: 1rem;
 }
 
