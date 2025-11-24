@@ -18,11 +18,11 @@ function PostCard({ post, onPostDeleted }) {
       if (isLiked) {
         await postService.unlikePost(post.id);
         setIsLiked(false);
-        setLikeCount(prev => prev - 1);
+        setLikeCount((prev) => prev - 1);
       } else {
         await postService.likePost(post.id);
         setIsLiked(true);
-        setLikeCount(prev => prev + 1);
+        setLikeCount((prev) => prev + 1);
       }
       onPostUpdate?.();
     } catch (error) {
@@ -52,7 +52,7 @@ function PostCard({ post, onPostDeleted }) {
 
   const handleAuthorClick = (e) => {
     e.stopPropagation();
-  }
+  };
 
   const getTimeAgo = (timestamp) => {
     const now = new Date();
@@ -64,7 +64,10 @@ function PostCard({ post, onPostDeleted }) {
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`;
     if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d`;
 
-    return posted.toLocaleDateString("en-us", {month: "short", day: "numeric"});
+    return posted.toLocaleDateString("en-us", {
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
@@ -82,10 +85,64 @@ function PostCard({ post, onPostDeleted }) {
       )}
 
       <div className="post-header">
-        <Link to={`/profile/${post.author.username}`} onClick={handleAuthorClick} className="author-link">
+        <Link
+          to={`/profile/${post.author.username}`}
+          onClick={handleAuthorClick}
+          className="author-link"
+        >
+          <img
+            src={post.author.avatarUrl}
+            alt={post.author.username}
+            className="avatar"
+          />
         </Link>
+        <div className="author-info">
+          <Link
+            to={`/profile/${post.author.username}`}
+            onClick={handleAuthorClick}
+            className="author-link"
+          >
+            <p className="display-name">{post.author.displayName}</p>
+          </Link>
+        </div>
+        <div className="meta-info">
+          <Link
+            to={`/profile/${post.author.username}`}
+            onClick={handleAuthorClick}
+            className="author-link"
+          >
+            <span className="username">@{post.author.username}</span>
+          </Link>
+          <span className="separator">·</span>
+          <span className="timestamp">{getTimeAgo(post.createdAt)}</span>
+        </div>
+      </div>
+
+      <p className="post-content">{post.content}</p>
+
+      <div className="post-actions">
+        <button
+          className={`action-button like-button ${isLiked ? "liked" : ""}`}
+          onClick={handleLike}
+          disabled={isLiking}
+        >
+          <span className="action-icon">{isLiked ? "❤️" : "🤍"}</span>
+          <span className="action-count">{likeCount}</span>
+        </button>
+
+        <button
+          className="action-button comment-button"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/post/${post.id}`);
+          }}
+        >
+          <span className="action-icon">💬</span>
+          <span className="action-count">{post._count.replies}</span>
+        </button>
       </div>
     </div>
-  )
-
+  );
 }
+
+export default PostCard;
