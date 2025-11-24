@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postService } from "../services/api.js";
+import Avatar from "./Avatar.jsx";
 import "./PostCard.css";
 
 function PostCard({ post, onPostDeleted }) {
@@ -90,10 +91,10 @@ function PostCard({ post, onPostDeleted }) {
           onClick={handleAuthorClick}
           className="author-link"
         >
-          <img
+          <Avatar
             src={post.author.avatarUrl}
             alt={post.author.username}
-            className="avatar"
+            size="medium"
           />
         </Link>
         <div className="author-info">
