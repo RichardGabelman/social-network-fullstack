@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { postService, profileService } from "../services/api.js";
 import Layout from "../components/Layout.jsx";
 import NewPostModal from "../components/NewPostModal.jsx";
@@ -14,21 +14,16 @@ function Home() {
   const [showNewPostModal, setShowNewPostModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
-    loadFeed();
-    loadCurrentUser();
-  }, [selectedFeed]);
-
-  const loadCurrentUser = async () => {
+  const loadCurrentUser = useCallback(async () => {
     try {
       const user = await profileService.getCurrentProfile();
       setCurrentUser(user);
     } catch (error) {
       console.error("Error loading current user:", error);
     }
-  };
+  }, []);
 
-  const loadFeed = async () => {
+  const loadFeed = useCallback(async () => {
     try {
       setLoading(true);
       const data =
@@ -41,7 +36,12 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedFeed]);
+
+  useEffect(() => {
+    loadFeed();
+    loadCurrentUser();
+  }, [loadFeed, loadCurrentUser]);
 
   const handlePostCreated = () => {
     loadFeed();
