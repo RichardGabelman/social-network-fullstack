@@ -1,0 +1,52 @@
+.post-card {
+  border-bottom: var(--border-primary);
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+
+.post-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.post-layout {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.post-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.post-main p {
+  margin: 0;
+}
+
+.author-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.author-link:hover {
+  text-decoration: underline;
+}
+
+.username {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timestamp {
+  color: rgba(243, 245, 247, 0.3);
+}

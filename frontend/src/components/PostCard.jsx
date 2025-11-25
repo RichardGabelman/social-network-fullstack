@@ -85,7 +85,7 @@ function PostCard({ post, onPostDeleted }) {
         </div>
       )}
 
-      <div className="post-header">
+      <div className="post-layout">
         <Link
           to={`/profile/${post.author.username}`}
           onClick={handleAuthorClick}
@@ -97,51 +97,50 @@ function PostCard({ post, onPostDeleted }) {
             size="medium"
           />
         </Link>
-        <div className="author-info">
-          <Link
-            to={`/profile/${post.author.username}`}
-            onClick={handleAuthorClick}
-            className="author-link"
-          >
-            <p className="display-name">{post.author.displayName}</p>
-          </Link>
-        </div>
-        <div className="meta-info">
-          <Link
-            to={`/profile/${post.author.username}`}
-            onClick={handleAuthorClick}
-            className="author-link"
-          >
-            <span className="username">@{post.author.username}</span>
-          </Link>
-          <span className="separator">·</span>
-          <span className="timestamp">{getTimeAgo(post.createdAt)}</span>
+
+        <div className="post-main">
+          <div className="post-header">
+            <div className="author-info">
+              <Link
+                to={`/profile/${post.author.username}`}
+                onClick={handleAuthorClick}
+                className="author-link"
+              >
+                <p className="username">{post.author.username}</p>
+              </Link>
+            </div>
+            <div className="meta-info">
+              <span className="timestamp">{getTimeAgo(post.createdAt)}</span>
+            </div>
+          </div>
+
+          <p className="post-content">{post.content}</p>
+
+          <div className="post-actions">
+            <button
+              className={`action-button like-button ${isLiked ? "liked" : ""}`}
+              onClick={handleLike}
+              disabled={isLiking}
+            >
+              <span className="action-icon">{isLiked ? "❤️" : "🤍"}</span>
+              <span className="action-count">{likeCount}</span>
+            </button>
+
+            <button
+              className="action-button comment-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/post/${post.id}`);
+              }}
+            >
+              <span className="action-icon">💬</span>
+              <span className="action-count">{post._count.replies}</span>
+            </button>
+          </div>
+
         </div>
       </div>
 
-      <p className="post-content">{post.content}</p>
-
-      <div className="post-actions">
-        <button
-          className={`action-button like-button ${isLiked ? "liked" : ""}`}
-          onClick={handleLike}
-          disabled={isLiking}
-        >
-          <span className="action-icon">{isLiked ? "❤️" : "🤍"}</span>
-          <span className="action-count">{likeCount}</span>
-        </button>
-
-        <button
-          className="action-button comment-button"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(`/post/${post.id}`);
-          }}
-        >
-          <span className="action-icon">💬</span>
-          <span className="action-count">{post._count.replies}</span>
-        </button>
-      </div>
     </div>
   );
 }
