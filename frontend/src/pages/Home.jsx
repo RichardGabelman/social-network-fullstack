@@ -43,8 +43,8 @@ function Home() {
     loadCurrentUser();
   }, [loadFeed, loadCurrentUser]);
 
-  const handlePostCreated = () => {
-    loadFeed();
+  const handlePostCreated = (newPost) => {
+    setPosts(prevPosts => [newPost, ...prevPosts]);
   };
 
   if (loading) {
@@ -76,6 +76,7 @@ function Home() {
       title={selectedFeed === "following" ? "Following" : "Explore"}
       selectedFeed={selectedFeed}
       onFeedChange={setSelectedFeed}
+      onPostCreated={handlePostCreated}
     >
       <div
         className="new-post-trigger"

@@ -11,6 +11,7 @@ function Layout({
   onFeedChange,
   title,
   showBackButton,
+  onPostCreated,
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -137,11 +138,13 @@ function Layout({
         isOpen={showFloatingModal}
         onClose={() => setShowFloatingModal(false)}
         variant="floating"
+        onPostCreated={onPostCreated}
       />
       <NewPostModal
         isOpen={showCenteredModal}
         onClose={() => setShowCenteredModal(false)}
         variant="centered"
+        onPostCreated={onPostCreated}
       />
     </div>
   );

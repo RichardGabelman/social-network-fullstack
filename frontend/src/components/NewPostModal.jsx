@@ -2,20 +2,23 @@ import { useState } from "react";
 import { postService } from "../services/api.js";
 import "./NewPostModal.css";
 
-function NewPostModal({ isOpen, onClose, variant = "centered" }) {
+function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (!content.trim()) return;
 
     try {
       setIsSubmitting(true);
-      await postService.createPost(content);
+      const newPost = await postService.createPost(content);
       setContent("");
       onClose();
+      onPostCreated(newPost);
     } catch (error) {
       console.error("Error creating post:", error);
       alert("Failed to create post");
