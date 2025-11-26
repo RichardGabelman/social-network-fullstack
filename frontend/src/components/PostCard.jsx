@@ -99,7 +99,7 @@ function PostCard({ post, onPostDeleted }) {
         </Link>
 
         <div className="post-main">
-          <div className="post-header">
+          <header className="post-header">
             <div className="author-info">
               <Link
                 to={`/profile/${post.author.username}`}
@@ -112,7 +112,7 @@ function PostCard({ post, onPostDeleted }) {
             <div className="meta-info">
               <span className="timestamp">{getTimeAgo(post.createdAt)}</span>
             </div>
-          </div>
+          </header>
 
           <p className="post-content">{post.content}</p>
 
