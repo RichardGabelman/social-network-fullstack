@@ -94,7 +94,7 @@ function Layout({
         </button>
       </nav>
 
-      <main className="main-content">
+      <div className="center-area">
         <header className="top-header">
           <div className="header-left">
             {showBackButton && (
@@ -104,9 +104,7 @@ function Layout({
             )}
           </div>
           <div className="header-center">
-            {title && (
-              <h1 className="page-title">{title}</h1>
-            )}
+            {title && <h1 className="page-title">{title}</h1>}
 
             {showFeedSelector && (
               <div className="feed-selector">
@@ -121,11 +119,11 @@ function Layout({
               </div>
             )}
           </div>
-          <div className="header-right"></div>
+          <div className="header-right">
+          </div>
         </header>
-
-        <div className="content">{children}</div>
-      </main>
+        <main className="content">{children}</main>
+      </div>
 
       <button
         className="new-post-button"

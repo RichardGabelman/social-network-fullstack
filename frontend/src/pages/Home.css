@@ -1,6 +1,5 @@
 .new-post-trigger {
   padding: 1rem 1.5rem;
-  padding-top: 1.4rem;
   border-bottom: var(--border-primary);
 }
 
@@ -30,6 +29,7 @@
   cursor: pointer;
   font-size: 0.9375rem;
   font-weight: 600;
+  z-index: 5;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;

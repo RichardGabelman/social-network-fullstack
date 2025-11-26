@@ -137,10 +137,8 @@ function PostCard({ post, onPostDeleted }) {
               <span className="action-count">{post._count.replies}</span>
             </button>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 }
