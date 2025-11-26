@@ -72,7 +72,7 @@ function PostCard({ post, onPostDeleted }) {
   };
 
   return (
-    <div className="post-card" onClick={handleCardClick}>
+    <article className="post-card" onClick={handleCardClick}>
       {post.replyTo && (
         <div className="reply-context">
           {post.replyTo.isReplyToDeleted ? (
@@ -139,7 +139,7 @@ function PostCard({ post, onPostDeleted }) {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 
