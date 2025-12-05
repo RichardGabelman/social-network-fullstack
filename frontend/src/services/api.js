@@ -14,6 +14,12 @@ const fetchWithAuth = async (url, options = {}) => {
 
   const response = await fetch(`${API_BASE}${url}`, config);
 
+  if (response.status === 401) {
+    localStorage.removeItem("authToken");
+    window.location.href = "/login";
+    throw new Error("Authentication expired. Please log in again.");
+  }
+
   // 204 No Content
   if (response.status === 204) {
     return null;
