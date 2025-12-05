@@ -2,6 +2,7 @@
   --color-background: rgb(10, 10, 10);
   --color-content-background: #181818;
   --color-text-primary: rgb(243, 245, 247);
+  --color-text-muted: rgba(255, 255, 255, 0.5);
   --border-primary: 1px solid rgba(243, 245, 247, 0.15);
 }
 
