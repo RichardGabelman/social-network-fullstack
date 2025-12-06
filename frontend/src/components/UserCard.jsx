@@ -33,7 +33,7 @@ function UserCard({ user, onFollowUpdate }) {
   return (
     <div className="user-card">
       <Link to={`/profile/${user.username}`} className="user-info">
-        <Avatar src={user.avatarUrl} alt={user.username} size="medium" />
+        <Avatar src={user.avatarUrl} alt={user.username} size="large" />
         <div className="user-details">
           <p className="username">{user.username}</p>
           <p className="display-name">{user.displayName}</p>

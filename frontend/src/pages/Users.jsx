@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { userService, followerService } from "../services/api";
-import { Link } from "react-router-dom";
-import Layout from "../components/Layout";
-import Avatar from "../components/Avatar";
+import { userService, profileService } from "../services/api";
+import Layout from "../components/Layout.jsx";
+import UserCard from "../components/UserCard.jsx";
 import "./Users.css";
 
 function Users() {
@@ -18,32 +17,13 @@ function Users() {
     try {
       setLoading(true);
       const data = await userService.getAllUsers();
-      setUsers(data);
+      // TEMPORARY: Add current user for testing
+      const currentUser = await profileService.getCurrentProfile();
+      setUsers([currentUser, ...data]);
     } catch (err) {
-      setError(err.message)
+      setError(err.message);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleFollowToggle = async (userId, isFollowing) => {
-    try {
-      if (isFollowing) {
-        await followerService.unfollowerUser(userId);
-      } else {
-        await followerService.followerUser(userId);
-      }
-
-      setUsers(prevUsers =>
-        prevUsers.map(user =>
-          user.id === userId
-            ? {...user, isFollowing: !isFollowing }
-            : user
-        )
-      );
-    } catch (error) {
-      console.error("Error toggling follow:", error);
-      alert("Failed to update follow status")
     }
   };
 
@@ -64,7 +44,19 @@ function Users() {
   }
 
   return (
-    <Layout title="Users" showBackButton></Layout>
+    <Layout title="Users" showBackButton>
+      <div className="users-container">
+        {users.length === 0 ? (
+          <div className="empty-users">
+            <p>No users found.</p>
+          </div>
+        ) : (
+          users.map((user) => (
+            <UserCard key={user.id} user={user} onFollowUpdate={loadUsers} />
+          ))
+        )}
+      </div>
+    </Layout>
   );
 }
 
