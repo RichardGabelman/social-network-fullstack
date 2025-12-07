@@ -3,6 +3,7 @@ import Login from "./pages/Login.jsx";
 import AuthCallback from "./pages/AuthCallback.jsx";
 import Home from "./pages/Home.jsx";
 import Users from "./pages/Users.jsx";
+import Profile from "./pages/Profile.jsx";
 import { authService } from "./services/api.js";
 
 function ProtectedRoute({ children }) {
@@ -29,6 +30,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:username"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />
