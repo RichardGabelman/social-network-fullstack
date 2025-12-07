@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { followerService, profileService } from "../services/api";
+import { followerService, postService, profileService } from "../services/api";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Avatar from "../components/Avatar";
+import PostCard from "../components/PostCard";
 
 function Profile() {
   const { username } = useParams();
   const [profile, setProfile] = useState(null);
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -15,6 +17,12 @@ function Profile() {
   useEffect(() => {
     loadProfile();
   }, [username]);
+
+  useEffect(() => {
+    if (profile) {
+      loadUserPosts();
+    }
+  }, [profile]);
 
   const loadProfile = async () => {
     try {
@@ -25,6 +33,15 @@ function Profile() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadUserPosts = async () => {
+    try {
+      const postsData = await postService.getUserPosts(profile.id);
+      setPosts(postsData);
+    } catch (err) {
+      console.error("Error loading posts:", err);
     }
   };
 
@@ -94,6 +111,18 @@ function Profile() {
             )}
           </div>
         </header>
+
+        <section className="profile-posts">
+          {posts.length === 0 ? (
+            <div className="empty-posts">
+              <p>No posts yet.</p>
+            </div>
+          ) : (
+            posts.map(post => {
+              return <PostCard key={post.id} post={post} />
+            })
+          )}
+        </section>
       </div>
     </Layout>
   );
