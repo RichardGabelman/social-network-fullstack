@@ -44,7 +44,7 @@ function Home() {
   }, [loadFeed, loadCurrentUser]);
 
   const handlePostCreated = (newPost) => {
-    setPosts(prevPosts => [newPost, ...prevPosts]);
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
 
   if (loading) {
@@ -84,7 +84,13 @@ function Home() {
       >
         <div className="trigger-content">
           <div className="trigger-left">
-            <Avatar src={currentUser.avatarUrl} alt={currentUser.username} size="medium"/>
+            {currentUser && (
+              <Avatar
+                src={currentUser.avatarUrl}
+                alt={currentUser.username}
+                size="medium"
+              />
+            )}
             <span className="trigger-placeholder">What's new?</span>
           </div>
           <button
