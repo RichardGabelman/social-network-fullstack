@@ -118,7 +118,7 @@ function Profile() {
                 className="edit-profile-button"
                 onClick={() => setShowEditModal(true)}
               >
-                Edit Profile
+                Edit profile
               </button>
             ) : (
               <button
