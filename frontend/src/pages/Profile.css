@@ -1,0 +1,16 @@
+.edit-profile-modal {
+  background-color: var(--color-content-background);
+  border-radius: 1rem;
+  padding: 0;
+  width: 90%;
+  max-width: 618px;
+  border: var(--border-primary);
+}
+
+.edit-profile-modal::backdrop {
+  display: none;
+}
+
+.edit-profile-modal form {
+  padding: 1.5rem;
+}

@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Avatar from "../components/Avatar";
 import PostCard from "../components/PostCard";
+import "./Profile.css";
 
 function Profile() {
   const { username } = useParams();
