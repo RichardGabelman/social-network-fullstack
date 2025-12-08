@@ -1,3 +1,39 @@
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-header {
+  padding: 1rem 1.5rem;
+  padding-top: 0.5rem;
+  border-bottom: var(--border-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-names {
+  padding-top: 1rem;
+}
+
+.profile-display-name, .profile-username {
+  margin: 0;
+}
+
+.profile-username {
+  margin-top: 2px;
+}
+
+.profile-top {
+  display: flex;
+  justify-content: space-between;
+}
+
 .edit-profile-modal {
   background-color: var(--color-content-background);
   border-radius: 1rem;
