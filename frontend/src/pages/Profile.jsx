@@ -73,7 +73,11 @@ function Profile() {
     try {
       await profileService.updateProfile(editForm);
       setShowEditModal(false);
-      loadProfile();
+      setProfile(prevProfile => ({
+        ...prevProfile,
+        displayName: editForm.displayName,
+        bio: editForm.bio
+      }));
     } catch (err) {
       console.error("Error updating profile:", err);
       alert("Failed to update profile");
@@ -154,38 +158,47 @@ function Profile() {
               onClick={(e) => e.stopPropagation()}
             >
               <form onSubmit={handleEditSubmit}>
-                <div className="form-group">
-                  <label htmlFor="displayName">Display Name</label>
-                  <input
-                    type="text"
-                    id="displayName"
-                    name="displayName"
-                    value={editForm.displayName}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, displayName: e.target.value })
-                    }
-                    maxLength={50}
-                    required
-                  />
-                </div>
+                <div className="form-groups">
+                  <div className="form-group">
+                    <label htmlFor="displayName">Name</label>
+                    <input
+                      type="text"
+                      id="displayName"
+                      name="displayName"
+                      value={editForm.displayName}
+                      onChange={(e) =>
+                        setEditForm({
+                          ...editForm,
+                          displayName: e.target.value,
+                        })
+                      }
+                      maxLength={50}
+                      required
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="bio">Bio</label>
-                  <textarea
-                    name="bio"
-                    id="bio"
-                    value={editForm.bio}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, bio: e.target.value })
-                    }
-                    maxLength={150}
-                    rows={3}
-                  />
-                  <span className="char-count" aria-live="polite">{editForm.bio.length}/150</span>
+                  <div className="form-group">
+                    <label htmlFor="bio">Bio</label>
+                    <textarea
+                      name="bio"
+                      id="bio"
+                      value={editForm.bio}
+                      onChange={(e) =>
+                        setEditForm({ ...editForm, bio: e.target.value })
+                      }
+                      maxLength={150}
+                      rows={3}
+                    />
+                    <span className="char-count" aria-live="polite">
+                      {editForm.bio.length}/150
+                    </span>
+                  </div>
                 </div>
 
                 <footer className="modal-actions">
-                  <button type="submit" className="modal-done">Done</button>
+                  <button type="submit" className="modal-done">
+                    Done
+                  </button>
                 </footer>
               </form>
             </dialog>
