@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postService } from "../services/api.js";
+import { useAuth } from "../contexts/AuthContext.jsx";
 import Avatar from "./Avatar.jsx";
 import "./PostCard.css";
 
 function PostCard({ post, onPostDeleted }) {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post._count.likes);
   const [isLiking, setIsLiking] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const handleLike = async (e) => {
     e.stopPropagation();
@@ -25,7 +28,6 @@ function PostCard({ post, onPostDeleted }) {
         setIsLiked(true);
         setLikeCount((prev) => prev + 1);
       }
-      onPostUpdate?.();
     } catch (error) {
       console.error("Error toggling like:", error);
     } finally {
@@ -55,6 +57,11 @@ function PostCard({ post, onPostDeleted }) {
     e.stopPropagation();
   };
 
+  const handleMenuToggle = (e) => {
+    e.stopPropagation();
+    setShowMenu(!showMenu);
+  };
+
   const getTimeAgo = (timestamp) => {
     const now = new Date();
     const posted = new Date(timestamp);
@@ -70,6 +77,8 @@ function PostCard({ post, onPostDeleted }) {
       day: "numeric",
     });
   };
+
+  const isOwnPost = currentUser && currentUser.id === post.author.id;
 
   return (
     <article className="post-card" onClick={handleCardClick}>
@@ -112,6 +121,26 @@ function PostCard({ post, onPostDeleted }) {
             <div className="meta-info">
               <span className="timestamp">{getTimeAgo(post.createdAt)}</span>
             </div>
+            {isOwnPost && (
+              <div className="post-menu">
+                <button
+                  className="post-menu-button"
+                  onClick={handleMenuToggle}
+                  aria-label="Post options"
+                >
+                  ⋯
+                </button>
+
+                {showMenu && (
+                  <div className="post-menu-dropdown">
+                    <button className="post-menu-item delete" onClick={handleDelete}>
+                      <span>Delete</span>
+                      <div>🗑️</div>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </header>
 
           <p className="post-content">{post.content}</p>
