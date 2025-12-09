@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { authService, profileService } from "../services/api.js";
+import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext.jsx";
 import NewPostModal from "./NewPostModal.jsx";
 import "./Layout.css";
 
@@ -15,25 +15,12 @@ function Layout({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
   const [showCenteredModal, setShowCenteredModal] = useState(false);
   const [showFloatingModal, setShowFloatingModal] = useState(false);
-
-  useEffect(() => {
-    loadCurrentUser();
-  }, []);
-
-  const loadCurrentUser = async () => {
-    try {
-      const user = await profileService.getCurrentProfile();
-      setCurrentUser(user);
-    } catch (error) {
-      console.error("Error loading current user:", error);
-    }
-  };
+  const { currentUser, logout } = useAuth();
 
   const handleLogout = () => {
-    authService.logout();
+    logout();
     navigate("/login");
   };
 
