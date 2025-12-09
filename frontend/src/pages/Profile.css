@@ -34,7 +34,7 @@
   justify-content: space-between;
 }
 
-.edit-profile-button, .follow-button {
+.edit-profile-button, .profile-follow-button {
   width: 100%;
   padding: 0.4rem;
   font-weight: 600;
@@ -53,13 +53,13 @@
   color: var(--color-text-primary);
 }
 
-.follow-button {
+.profile-follow-button {
   background-color: var(--color-text-primary);
   border: none;
   color: var(--color-content-background);
 }
 
-.follow-button .following {
+.profile-follow-button .profile-following {
   background-color: var(--color-content-background);
   color: var(--color-text-primary);
   border: var(--border-primary);
