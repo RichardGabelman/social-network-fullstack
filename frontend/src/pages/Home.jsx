@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { postService, profileService } from "../services/api.js";
+import { postService } from "../services/api.js";
+import { useAuth } from "../contexts/AuthContext.jsx";
 import Layout from "../components/Layout.jsx";
 import NewPostModal from "../components/NewPostModal.jsx";
 import PostCard from "../components/PostCard.jsx";
@@ -12,16 +13,7 @@ function Home() {
   const [error, setError] = useState(null);
   const [selectedFeed, setSelectedFeed] = useState("following");
   const [showNewPostModal, setShowNewPostModal] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-
-  const loadCurrentUser = useCallback(async () => {
-    try {
-      const user = await profileService.getCurrentProfile();
-      setCurrentUser(user);
-    } catch (error) {
-      console.error("Error loading current user:", error);
-    }
-  }, []);
+  const { currentUser } = useAuth();
 
   const loadFeed = useCallback(async () => {
     try {
@@ -40,11 +32,14 @@ function Home() {
 
   useEffect(() => {
     loadFeed();
-    loadCurrentUser();
-  }, [loadFeed, loadCurrentUser]);
+  }, [loadFeed]);
 
   const handlePostCreated = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
+  };
+
+  const handlePostDeleted = (postId) => {
+    setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
   };
 
   if (loading) {
@@ -113,7 +108,7 @@ function Home() {
           </div>
         ) : (
           posts.map((post) => (
-            <PostCard key={post.id} post={post} onPostUpdate={loadFeed} />
+            <PostCard key={post.id} post={post} onPostDeleted={handlePostDeleted}/>
           ))
         )}
       </div>

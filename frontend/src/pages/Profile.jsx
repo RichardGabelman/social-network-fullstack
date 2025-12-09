@@ -42,6 +42,10 @@ function Profile() {
     }
   };
 
+  const handlePostDeleted = (postId) => {
+    setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
+  };
+
   const loadUserPosts = async () => {
     try {
       const postsData = await postService.getUserPosts(profile.id);
@@ -126,7 +130,7 @@ function Profile() {
               </button>
             ) : (
               <button
-                className={`follow-button ${isFollowing ? "following" : ""}`}
+                className={`profile-follow-button ${isFollowing ? "profile-following" : ""}`}
                 onClick={handleFollowToggle}
               >
                 {isFollowing ? "Following" : "Follow"}
@@ -142,7 +146,7 @@ function Profile() {
             </div>
           ) : (
             posts.map((post) => {
-              return <PostCard key={post.id} post={post} />;
+              return <PostCard key={post.id} post={post} onPostDeleted={handlePostDeleted}/>;
             })
           )}
         </section>
