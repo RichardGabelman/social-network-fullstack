@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { followerService, postService, profileService } from "../services/api";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
@@ -16,17 +16,7 @@ function Profile() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ displayName: "", bio: "" });
 
-  useEffect(() => {
-    loadProfile();
-  }, [username]);
-
-  useEffect(() => {
-    if (profile) {
-      loadUserPosts();
-    }
-  }, [profile]);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
       const data = await profileService.getProfileByUsername(username);
@@ -40,19 +30,29 @@ function Profile() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [username]);
 
-  const handlePostDeleted = (postId) => {
-    setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
-  };
-
-  const loadUserPosts = async () => {
+  const loadUserPosts = useCallback(async (userId) => {
     try {
-      const postsData = await postService.getUserPosts(profile.id);
+      const postsData = await postService.getUserPosts(userId);
       setPosts(postsData);
     } catch (err) {
       console.error("Error loading posts:", err);
     }
+  }, []);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
+
+  useEffect(() => {
+    if (profile) {
+      loadUserPosts(profile.id);
+    }
+  }, [profile, loadUserPosts]);
+
+  const handlePostDeleted = (postId) => {
+    setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
   };
 
   const handleFollowToggle = async () => {
@@ -77,10 +77,10 @@ function Profile() {
     try {
       await profileService.updateProfile(editForm);
       setShowEditModal(false);
-      setProfile(prevProfile => ({
+      setProfile((prevProfile) => ({
         ...prevProfile,
         displayName: editForm.displayName,
-        bio: editForm.bio
+        bio: editForm.bio,
       }));
     } catch (err) {
       console.error("Error updating profile:", err);
@@ -130,7 +130,9 @@ function Profile() {
               </button>
             ) : (
               <button
-                className={`profile-follow-button ${isFollowing ? "profile-following" : ""}`}
+                className={`profile-follow-button ${
+                  isFollowing ? "profile-following" : ""
+                }`}
                 onClick={handleFollowToggle}
               >
                 {isFollowing ? "Following" : "Follow"}
@@ -146,7 +148,13 @@ function Profile() {
             </div>
           ) : (
             posts.map((post) => {
-              return <PostCard key={post.id} post={post} onPostDeleted={handlePostDeleted}/>;
+              return (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onPostDeleted={handlePostDeleted}
+                />
+              );
             })
           )}
         </section>
