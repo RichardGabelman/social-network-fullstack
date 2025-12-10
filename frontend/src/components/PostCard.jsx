@@ -87,7 +87,7 @@ function PostCard({ post, onPostDeleted }) {
         className="not-liked post-svg"
         viewBox="0 0 24 24"
       >
-        <title>heart-outline</title>
+        <title>Like</title>
         <path d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z" />
       </svg>
     );
@@ -100,8 +100,17 @@ function PostCard({ post, onPostDeleted }) {
         className="liked post-svg"
         viewBox="0 0 24 24"
       >
-        <title>heart</title>
+        <title>Unlike</title>
         <path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" />
+      </svg>
+    );
+  }
+
+  function CommentSpeechBubble() {
+    return (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="reply post-svg">
+        <title>Reply</title>
+        <path d="M12,3C6.5,3 2,6.58 2,11C2.05,13.15 3.06,15.17 4.75,16.5C4.75,17.1 4.33,18.67 2,21C4.37,20.89 6.64,20 8.47,18.5C9.61,18.83 10.81,19 12,19C17.5,19 22,15.42 22,11C22,6.58 17.5,3 12,3M12,17C7.58,17 4,14.31 4,11C4,7.69 7.58,5 12,5C16.42,5 20,7.69 20,11C20,14.31 16.42,17 12,17Z" />
       </svg>
     );
   }
@@ -191,7 +200,7 @@ function PostCard({ post, onPostDeleted }) {
                 navigate(`/post/${post.id}`);
               }}
             >
-              <span className="action-icon">💬</span>
+              <CommentSpeechBubble />
               <span className="action-count">{post._count.replies}</span>
             </button>
           </div>
