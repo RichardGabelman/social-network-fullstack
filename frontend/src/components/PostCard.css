@@ -113,3 +113,36 @@
 .timestamp {
   color: rgba(243, 245, 247, 0.3);
 }
+
+.post-actions {
+  display: flex;
+  align-items: center;
+}
+
+.post-svg {
+  width: 1.2rem;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  fill: var(--color-text-muted);
+  cursor: pointer;
+  min-height: 2.25rem;
+  border-radius: 0.75rem;
+}
+
+.action-button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.liked {
+  color: color(display-p3 1 0.18 0.25);
+  fill: color(display-p3 1 0.18 0.25);
+}
