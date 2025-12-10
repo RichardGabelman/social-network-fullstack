@@ -36,18 +36,13 @@
   border: none;
   text-decoration: none;
   text-align: center;
+  cursor: pointer;
 }
 
 .nav-new-post-button {
   background-color: rgba(255, 255, 255, 0.08);
-  color: rgb(77, 77, 77);
   width: 60px;
   height: 48px;
-  font-size: 40px;
-}
-
-.nav-new-post-button:hover {
-  color: rgb(243, 245, 247); 
 }
 
 .nav-item:hover {
@@ -67,6 +62,13 @@
   cursor: pointer;
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.08) 0px 6px 8px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.new-post-button svg {
+  fill: var(--color-text-primary);
 }
 
 .new-post-button:hover {
@@ -74,6 +76,10 @@
   height: 74px;
   right: 15px;
   bottom: 16px;
+}
+
+.new-post-button:hover svg {
+  width: 2.2rem;
 }
 
 .logout-button {
@@ -89,11 +95,6 @@
   color: rgb(243, 245, 247);
   background-color: rgba(255, 255, 255, 0.08);
   border-radius: .8rem;
-}
-
-.logo {
-  color: rgb(243, 245, 247);
-  text-decoration: none;
 }
 
 .center-area {
@@ -158,4 +159,21 @@
   margin-left: 1rem;
   border-radius: 100%;
   padding-bottom: 0.3rem;
+}
+
+.nav-icon {
+  fill: rgb(77, 77, 77);
+  width: 2rem;
+}
+
+.nav-new-post-button:hover svg {
+  fill: var(--color-text-primary);
+}
+
+.active svg {
+  fill: var(--color-text-primary);
+}
+
+.logo svg {
+  fill: var(--color-text-primary);
 }
