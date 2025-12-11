@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postService } from "../services/api.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
@@ -12,6 +12,23 @@ function PostCard({ post, onPostDeleted }) {
   const [likeCount, setLikeCount] = useState(post._count.likes);
   const [isLiking, setIsLiking] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showMenu]);
 
   const handleLike = async (e) => {
     e.stopPropagation();
@@ -161,7 +178,7 @@ function PostCard({ post, onPostDeleted }) {
               <span className="timestamp">{getTimeAgo(post.createdAt)}</span>
             </div>
             {isOwnPost && (
-              <div className="post-menu">
+              <div className="post-menu" ref={menuRef}>
                 <button
                   className="post-menu-button"
                   onClick={handleMenuToggle}
