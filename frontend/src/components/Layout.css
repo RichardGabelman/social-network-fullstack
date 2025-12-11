@@ -87,14 +87,12 @@
   color: rgb(77, 77, 77);
   border: none;
   margin-bottom: 22px;
-  width: 48px;
-  height: 53px;
+  border-radius: .8rem;
 }
 
 .logout-button:hover {
   color: rgb(243, 245, 247);
   background-color: rgba(255, 255, 255, 0.08);
-  border-radius: .8rem;
 }
 
 .center-area {
