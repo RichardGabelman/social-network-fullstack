@@ -152,3 +152,8 @@
 .reply {
   transform: scaleX(-1);
 }
+
+.delete svg {
+  fill: rgb(255, 48, 64);
+  width: 1.45rem;
+}
