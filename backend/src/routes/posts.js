@@ -263,6 +263,7 @@ router.get(
   async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
+      const currentUserId = req.user.id;
 
       const posts = await prisma.post.findMany({
         where: { authorId: userId },
@@ -287,7 +288,25 @@ router.get(
         },
       });
 
-      res.json(posts);
+      const postsWithLikeStatus = await Promise.all(
+        posts.map(async (post) => {
+          const like = await prisma.like.findUnique({
+            where: {
+              userId_postId: {
+                userId: currentUserId,
+                postId: post.id,
+              },
+            },
+          });
+
+          return {
+            ...post,
+            isLiked: like !== null,
+          };
+        })
+      );
+
+      res.json(postsWithLikeStatus);
     } catch (error) {
       console.error("Error fetching user posts:", error);
       res.status(500).json({ error: "Failed to fetch user posts" });
