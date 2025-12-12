@@ -220,3 +220,18 @@
 .feed-dropdown-item:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
+
+.back-button {
+  background-color: var(--color-content-background);
+  border: var(--border-primary);
+  display: flex;
+  border-radius: 2rem;
+  padding: 0.2rem;
+  margin-left: 1.5rem;
+  cursor: pointer;
+}
+
+.back-button svg {
+  width: 1rem;
+  fill: white;
+}
