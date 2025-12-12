@@ -20,6 +20,7 @@
   color: var(--color-text-primary);
   font-size: 1.1rem;
   margin-top: 1.2rem;
+  cursor: pointer;
 }
 
 .github-button:hover {
