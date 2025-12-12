@@ -8,8 +8,7 @@ function UserCard({ user, onFollowUpdate }) {
   const [isFollowing, setIsFollowing] = useState(user.isFollowing);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const handleFollowToggle = async (e) => {
-    e.preventDefault();
+  const handleFollowToggle = async () => {
     if (isUpdating) return;
 
     try {

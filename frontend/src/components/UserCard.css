@@ -33,3 +33,22 @@
 .username {
   color: var(--color-text-primary);
 }
+
+.follow-button {
+  background: none;
+  background-color: var(--color-text-primary);
+  border: none;
+  color: var(--color-content-background);
+  cursor: pointer;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  border-radius: 0.5rem;
+}
+
+.following {
+  background-color: var(--color-content-background);
+  color: var(--color-text-primary);
+  border: var(--border-primary);
+}
