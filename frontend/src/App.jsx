@@ -5,6 +5,7 @@ import AuthCallback from "./pages/AuthCallback.jsx";
 import Home from "./pages/Home.jsx";
 import Users from "./pages/Users.jsx";
 import Profile from "./pages/Profile.jsx";
+import Post from "./pages/Post.jsx";
 
 function ProtectedRoute({ children }) {
   const { currentUser, loading } = useAuth();
@@ -45,6 +46,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/post/:postId"
+            element={
+              <ProtectedRoute>
+                <Post />
               </ProtectedRoute>
             }
           />
