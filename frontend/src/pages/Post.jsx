@@ -26,6 +26,8 @@ function Post() {
       if (data.replyTo && !data.replyTo.isReplyToDeleted) {
         const parent = await postService.getPost(data.replyTo.id);
         setParentPost(parent);
+      } else {
+        setParentPost(null);
       }
     } catch (err) {
       setError(err.message);
