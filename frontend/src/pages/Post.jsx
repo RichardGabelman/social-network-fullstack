@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import Layout from "../components/Layout.jsx";
 import PostCard from "../components/PostCard.jsx";
@@ -9,6 +9,7 @@ import "./Post.css";
 
 function Post() {
   const { postId } = useParams();
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const [post, setPost] = useState(null);
   const [parentPost, setParentPost] = useState(null);
