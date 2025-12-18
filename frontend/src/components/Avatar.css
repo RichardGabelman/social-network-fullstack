@@ -5,6 +5,11 @@
   border: var(--border-primary);
 }
 
+.avatar-small {
+  width: 20px;
+  height: 20px;
+}
+
 .avatar-medium {
   width: 36px;
   height: 36px;

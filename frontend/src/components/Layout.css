@@ -1,3 +1,7 @@
+main {
+  min-height: 100vh;
+}
+
 .layout {
   display: flex;
   justify-content: center;

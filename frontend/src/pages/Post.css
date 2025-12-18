@@ -1,0 +1,68 @@
+.post-page {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 3rem;
+}
+
+.reply-form {
+  position: fixed;
+  bottom: 0;
+  padding: 1rem;
+  width: 640px;
+  background-color: rgb(16, 16, 16);
+  border: var(--border-primary);
+}
+
+.reply-form-content {
+  display: flex;
+  border: var(--border-primary);
+  background-color: var(--color-content-background);
+  border-radius: 2rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0.1rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.reply-form textarea {
+  flex: 1;
+  border: none;
+  background-color: var(--color-content-background);
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+  padding: 0.5rem 1rem;
+  color: var(--color-text-primary);
+}
+
+.reply-form textarea:focus {
+  outline: none;
+}
+
+.reply-form-footer {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reply-button {
+  background-color: var(--color-content-background);
+  color: var(--color-text-primary);
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.reply-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.reply-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
