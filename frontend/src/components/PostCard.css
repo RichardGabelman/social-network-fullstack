@@ -157,3 +157,11 @@
   fill: rgb(255, 48, 64);
   width: 1.45rem;
 }
+
+.reply-text {
+  color: var(--color-text-muted);
+}
+
+.reply-context {
+  padding: 0.5rem;
+}

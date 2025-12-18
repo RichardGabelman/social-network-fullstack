@@ -101,7 +101,7 @@ function Post() {
           ))}
         </section>
 
-        <form className="reply-form">
+        <form className="reply-form" onSubmit={handleReplySubmit}>
            <div className="reply-form-content">
             {currentUser && (
               <Avatar src={currentUser.avatarUrl} alt={currentUser.username} size={"small"} />

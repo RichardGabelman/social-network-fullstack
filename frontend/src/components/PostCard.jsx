@@ -141,10 +141,10 @@ function PostCard({ post, onPostDeleted }) {
       {post.replyTo && (
         <div className="reply-context">
           {post.replyTo.isReplyToDeleted ? (
-            <span className="reply-text">Replying to deleted post</span>
+            <span className="reply-text">Reply to deleted post</span>
           ) : (
             <span className="reply-text">
-              Replying to @{post.replyTo.author.username}
+              Reply to @{post.replyTo.author.username}
             </span>
           )}
         </div>
