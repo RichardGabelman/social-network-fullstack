@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import Layout from "../components/Layout.jsx";
 import PostCard from "../components/PostCard.jsx";
@@ -64,6 +64,21 @@ function Post() {
     }
   };
 
+  const handlePostDeleted = (deletedPostId) => {
+    if (deletedPostId === post.id) {
+      navigate(-1);
+    } else {
+      setPost(prev => ({
+        ...prev,
+        replies: prev.replies.filter(r => r.id !== deletedPostId),
+        _count: {
+          ...prev._count,
+          replies: prev._count.replies - 1,
+        },
+      }));
+    }
+  };
+
   if (loading) {
     return (
       <Layout title="Thread" showBackButton>
@@ -92,12 +107,12 @@ function Post() {
         )}
 
         <article className="main-post">
-          <PostCard post={post} />
+          <PostCard post={post} onPostDeleted={handlePostDeleted}/>
         </article>
 
         <section className="replies-section">
           {replies.map((reply) => (
-            <PostCard key={reply.id} post={reply} />
+            <PostCard key={reply.id} post={reply} onPostDeleted={handlePostDeleted}/>
           ))}
         </section>
 

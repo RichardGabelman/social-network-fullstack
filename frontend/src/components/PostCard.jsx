@@ -140,7 +140,7 @@ function PostCard({ post, onPostDeleted }) {
     <article className="post-card" onClick={handleCardClick}>
       {post.replyTo && (
         <div className="reply-context">
-          {post.replyTo.isReplyToDeleted ? (
+          {post.isReplyToDeleted ? (
             <span className="reply-text">Reply to deleted post</span>
           ) : (
             <span className="reply-text">
