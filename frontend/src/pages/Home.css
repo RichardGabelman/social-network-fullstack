@@ -34,3 +34,10 @@
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
+
+@media (max-width: 790px) {
+  .new-post-trigger {
+    display: none;
+    border-radius: none;
+  }
+}

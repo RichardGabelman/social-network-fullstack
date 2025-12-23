@@ -287,7 +287,6 @@ main {
     right: 0;
     height: 70px;
     background-color: var(--color-background);
-    border-top: var(--border-primary);
     z-index: 100;
     justify-content: space-around;
     align-items: center;
@@ -342,5 +341,10 @@ main {
     color: var(--color-text-primary);
     font-weight: 600;
     border-bottom-color: var(--color-text-primary);
+  }
+
+  .content {
+    border-radius: 0;
+    border: none;
   }
 }
