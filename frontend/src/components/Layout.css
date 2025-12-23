@@ -239,3 +239,44 @@ main {
   width: 1rem;
   fill: white;
 }
+
+@media (max-width: 790px) {
+  .layout {
+    padding-bottom: 70px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .center-area {
+    margin-left: 0;
+    max-width: 100%;
+    width: 100%;
+    border-left: none;
+    border-right: none;
+  }
+
+  .top-header {
+    display: none;
+  }
+
+  .mobile-home-header {
+    display: block;
+  }
+
+  .mobile-logo-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: var(--border-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .new-post-button {
+    display: none;
+  }
+}
