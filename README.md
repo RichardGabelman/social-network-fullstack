@@ -1,1 +1,1 @@
-# threads-clone
+# DevThread, the Threads-inspired Developer Social Network
