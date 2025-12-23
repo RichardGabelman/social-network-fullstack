@@ -269,8 +269,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
-    border-bottom: var(--border-primary);
+    padding-top: 1rem;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -278,5 +277,70 @@ main {
 
   .new-post-button {
     display: none;
+  }
+
+  .navbar-mobile {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background-color: var(--color-background);
+    border-top: var(--border-primary);
+    z-index: 100;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .nav-item-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    gap: 0.25rem;
+  }
+
+  .nav-item-mobile.active {
+    color: var(--color-text-primary);
+  }
+
+  .nav-icon-mobile {
+    width: 40px;
+    height: 40px;
+    fill: rgb(77, 77, 77);
+  }
+
+  .mobile-feed-selector {
+    display: flex;
+    background-color: var(--color-background);
+    position: sticky;
+    top: 60px;
+    z-index: 9;
+  }
+
+  .mobile-feed-option {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: rgb(77, 77, 77);
+    font-size: 1rem;
+    cursor: pointer;
+    border-bottom: 2px solid rgb(77, 77, 77);
+    transition: all 0.2s;
+    font-weight: 500;
+    font-family: inherit;
+  }
+
+  .mobile-feed-option.active {
+    color: var(--color-text-primary);
+    font-weight: 600;
+    border-bottom-color: var(--color-text-primary);
   }
 }

@@ -234,6 +234,70 @@ function Layout({
         <main className="content">{children}</main>
       </div>
 
+      <nav className="navbar-mobile">
+        <Link
+          to="/"
+          className={`nav-item-mobile ${
+            location.pathname === "/" ? "active" : ""
+          }`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className="nav-icon-mobile"
+          >
+            <path d="M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22" />
+          </svg>
+        </Link>
+
+        <Link
+          to="/users"
+          className={`nav-item-mobile ${
+            location.pathname === "/users" ? "active" : ""
+          }`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className="nav-icon-mobile"
+          >
+            <path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+          </svg>
+        </Link>
+
+        <button
+          className="nav-item-mobile"
+          onClick={() => setShowCenteredModal(true)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className="nav-icon-mobile"
+          >
+            <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+          </svg>
+        </button>
+
+        {currentUser && (
+          <Link
+            to={`/profile/${currentUser.username}`}
+            className={`nav-item-mobile ${
+              location.pathname === `/profile/${currentUser.username}`
+                ? "active"
+                : ""
+            }`}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              className="nav-icon-mobile"
+            >
+              <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+            </svg>
+          </Link>
+        )}
+      </nav>
+
       <button
         className="new-post-button"
         onClick={() => setShowFloatingModal(!showFloatingModal)}
