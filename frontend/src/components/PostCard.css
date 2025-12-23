@@ -97,6 +97,7 @@
 .author-link {
   text-decoration: none;
   color: inherit;
+  padding-top: 0.4rem;
 }
 
 .author-link:hover {
@@ -163,5 +164,6 @@
 }
 
 .reply-context {
-  padding: 0.5rem;
+  padding: 0.75rem;
+  padding-top: 0;
 }
