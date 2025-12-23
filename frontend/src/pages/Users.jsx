@@ -17,9 +17,7 @@ function Users() {
     try {
       setLoading(true);
       const data = await userService.getAllUsers();
-      // TEMPORARY: Add current user for testing
-      const currentUser = await profileService.getCurrentProfile();
-      setUsers([currentUser, ...data]);
+      setUsers(data);
     } catch (err) {
       setError(err.message);
     } finally {
