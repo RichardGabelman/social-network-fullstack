@@ -348,3 +348,12 @@ main {
     border: none;
   }
 }
+
+@media (min-width: 701px) {
+  .navbar-mobile,
+  .mobile-home-header,
+  .mobile-logo-header,
+  .mobile-feed-selector {
+    display: none;
+  }
+}
