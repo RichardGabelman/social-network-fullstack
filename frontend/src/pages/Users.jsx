@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { userService, profileService } from "../services/api";
+import { userService } from "../services/api";
 import Layout from "../components/Layout.jsx";
 import UserCard from "../components/UserCard.jsx";
 import "./Users.css";
