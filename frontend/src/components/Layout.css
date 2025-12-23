@@ -243,6 +243,7 @@ main {
 @media (max-width: 790px) {
   .layout {
     padding-bottom: 70px;
+    max-height: none;
   }
 
   .nav-menu {
@@ -251,18 +252,17 @@ main {
 
   .center-area {
     margin-left: 0;
+    height: 100vh;
+    overflow-y: scroll;
     max-width: 100%;
     width: 100%;
     border-left: none;
     border-right: none;
+    padding-bottom: 70px;
   }
 
   .top-header {
     display: none;
-  }
-
-  .mobile-home-header {
-    display: block;
   }
 
   .mobile-logo-header {
@@ -347,9 +347,42 @@ main {
     border-radius: 0;
     border: none;
   }
+
+  .mobile-home-header {
+    background-color: var(--color-background);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .mobile-back-button {
+    position: relative;
+    left: 1rem;
+    top: 0.6rem;
+    background: none;
+    border: none;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+  }
+
+  .mobile-back-button svg {
+    width: 30px;
+    height: 30px;
+    fill: var(--color-text-primary);
+  }
+
+  .mobile-back-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 
-@media (min-width: 701px) {
+@media (min-width: 791px) {
   .navbar-mobile,
   .mobile-home-header,
   .mobile-logo-header,
