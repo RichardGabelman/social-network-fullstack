@@ -16,7 +16,7 @@ router.get(
   "/github/callback",
   passport.authenticate("github", {
     session: false,
-    failureRedirect: `${process.env.FRONTEND_URL}/login?error=auth_failed`,
+    failureRedirect: `${process.env.CLIENT_ORIGIN}/login?error=auth_failed`,
   }),
   (req, res) => {
     const token = jwt.sign(
@@ -25,7 +25,7 @@ router.get(
       { expiresIn: "7d" }
     );
 
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}`);
+    res.redirect(`${process.env.CLIENT_ORIGIN}/auth/callback?token=${token}`);
   }
 );
 
