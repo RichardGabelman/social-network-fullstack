@@ -35,6 +35,10 @@
     sans-serif;
 }
 
+.empty-feed {
+  padding-left: 1rem;
+}
+
 @media (max-width: 790px) {
   .new-post-trigger {
     display: none;
