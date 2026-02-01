@@ -1,1 +1,1 @@
-# DevThread, the Threads-inspired Developer Social Network
+# DevThreads, the Threads-inspired Developer Social Network
