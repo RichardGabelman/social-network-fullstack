@@ -60,7 +60,7 @@ function Profile() {
 
     try {
       if (isFollowing) {
-        await followerService.unfollowerUser(profile.id);
+        await followerService.unfollowUser(profile.id);
       } else {
         await followerService.followUser(profile.id);
       }

@@ -143,7 +143,7 @@ export const followerService = {
     });
   },
 
-  unfollowerUser: async (userId) => {
+  unfollowUser: async (userId) => {
     return fetchWithAuth(`/follows/${userId}`, {
       method: "DELETE",
     });
