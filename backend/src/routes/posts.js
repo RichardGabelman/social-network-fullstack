@@ -143,23 +143,15 @@ router.get("/", isLoggedIn, async (req, res) => {
       take: 50,
     });
 
-    const postsWithLikeStatus = await Promise.all(
-      posts.map(async (post) => {
-        const like = await prisma.like.findUnique({
-          where: {
-            userId_postId: {
-              userId: req.user.id,
-              postId: post.id,
-            },
-          },
-        });
-
-        return {
-          ...post,
-          isLiked: like !== null,
-        };
-      }),
-    );
+    const likedPostIds = await prisma.like.findMany({
+      where: { userId: req.user.id, postId: { in: posts.map((p) => p.id) } },
+      select: { postId: true },
+    });
+    const likedSet = new Set(likedPostIds.map((l) => l.postId));
+    const postsWithLikeStatus = posts.map((post) => ({
+      ...post,
+      isLiked: likedSet.has(post.id),
+    }));
 
     res.json(postsWithLikeStatus);
   } catch (error) {
@@ -295,7 +287,6 @@ router.get(
   async (req, res) => {
     try {
       const userId = parseInt(req.params.userId);
-      const currentUserId = req.user.id;
 
       const posts = await prisma.post.findMany({
         where: { authorId: userId },
@@ -320,23 +311,15 @@ router.get(
         },
       });
 
-      const postsWithLikeStatus = await Promise.all(
-        posts.map(async (post) => {
-          const like = await prisma.like.findUnique({
-            where: {
-              userId_postId: {
-                userId: currentUserId,
-                postId: post.id,
-              },
-            },
-          });
-
-          return {
-            ...post,
-            isLiked: like !== null,
-          };
-        }),
-      );
+      const likedPostIds = await prisma.like.findMany({
+        where: { userId: req.user.id, postId: { in: posts.map((p) => p.id) } },
+        select: { postId: true },
+      });
+      const likedSet = new Set(likedPostIds.map((l) => l.postId));
+      const postsWithLikeStatus = posts.map((post) => ({
+        ...post,
+        isLiked: likedSet.has(post.id),
+      }));
 
       res.json(postsWithLikeStatus);
     } catch (error) {
