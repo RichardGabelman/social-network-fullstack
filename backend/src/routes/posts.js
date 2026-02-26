@@ -85,7 +85,7 @@ router.post(
       console.log("Error creating post:", error);
       res.status(500).json({ error: "Failed to create post" });
     }
-  }
+  },
 );
 
 router.get("/", isLoggedIn, async (req, res) => {
@@ -158,13 +158,45 @@ router.get("/", isLoggedIn, async (req, res) => {
           ...post,
           isLiked: like !== null,
         };
-      })
+      }),
     );
 
     res.json(postsWithLikeStatus);
   } catch (error) {
     console.error("Error fetching feed:", error);
     res.status(500).json({ error: "Failed to fetch feed" });
+  }
+});
+
+router.get("/explore", isLoggedIn, async (req, res) => {
+  try {
+    const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+            displayName: true,
+            avatarUrl: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            replies: true,
+          },
+        },
+      },
+      take: 50,
+    });
+
+    res.json(posts);
+  } catch (error) {
+    console.error("Error fetching explore posts:", error);
+    res.status(500).json({ error: "Failed to fetch posts" });
   }
 });
 
@@ -252,7 +284,7 @@ router.get(
       console.error("Error fetching post:", error);
       res.status(500).json({ error: "Failed to fetch post" });
     }
-  }
+  },
 );
 
 router.get(
@@ -303,7 +335,7 @@ router.get(
             ...post,
             isLiked: like !== null,
           };
-        })
+        }),
       );
 
       res.json(postsWithLikeStatus);
@@ -311,7 +343,7 @@ router.get(
       console.error("Error fetching user posts:", error);
       res.status(500).json({ error: "Failed to fetch user posts" });
     }
-  }
+  },
 );
 
 router.delete(
@@ -353,7 +385,7 @@ router.delete(
       console.error("Error deleting post:", error);
       res.status(500).json({ error: "Failed to delete post" });
     }
-  }
+  },
 );
 
 router.post(
@@ -389,7 +421,7 @@ router.post(
       console.error("Error liking post:", error);
       res.status(500).json({ error: "Failed to like post" });
     }
-  }
+  },
 );
 
 router.delete(
@@ -419,39 +451,7 @@ router.delete(
       console.error("Error unliking post:", error);
       res.status(500).json({ error: "Failed to unlike post" });
     }
-  }
+  },
 );
-
-router.get("/explore", isLoggedIn, async (req, res) => {
-  try {
-    const posts = await prisma.post.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatarUrl: true,
-          },
-        },
-        _count: {
-          select: {
-            likes: true,
-            replies: true,
-          },
-        },
-      },
-      take: 50,
-    });
-
-    res.json(posts);
-  } catch (error) {
-    console.error("Error fetching explore posts:", error);
-    res.status(500).json({ error: "Failed to fetch posts" });
-  }
-});
 
 export default router;
