@@ -146,6 +146,8 @@
 }
 
 .liked {
+  color: rgb(255, 46, 64);
+  fill: rgb(255, 46, 64);
   color: color(display-p3 1 0.18 0.25);
   fill: color(display-p3 1 0.18 0.25);
 }
