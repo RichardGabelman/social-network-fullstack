@@ -39,7 +39,7 @@ function Home() {
   };
 
   const handlePostDeleted = (postId) => {
-    setPosts(prevPosts => prevPosts.filter(p => p.id !== postId));
+    setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
   };
 
   if (loading) {
@@ -56,13 +56,15 @@ function Home() {
   }
 
   if (error) {
-    <Layout
-      showFeedSelector
-      selectedFeed={selectedFeed}
-      onFeedChange={setSelectedFeed}
-    >
-      <div className="error">Error: {error}</div>
-    </Layout>;
+    return (
+      <Layout
+        showFeedSelector
+        selectedFeed={selectedFeed}
+        onFeedChange={setSelectedFeed}
+      >
+        <div className="error">Error: {error}</div>
+      </Layout>
+    );
   }
 
   return (
@@ -108,7 +110,11 @@ function Home() {
           </div>
         ) : (
           posts.map((post) => (
-            <PostCard key={post.id} post={post} onPostDeleted={handlePostDeleted}/>
+            <PostCard
+              key={post.id}
+              post={post}
+              onPostDeleted={handlePostDeleted}
+            />
           ))
         )}
       </div>
