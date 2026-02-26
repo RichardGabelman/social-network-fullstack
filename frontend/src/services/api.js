@@ -28,7 +28,6 @@ const fetchWithAuth = async (url, options = {}) => {
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     console.error("API Error Response:", error);
-    console.error('API Error Response:', JSON.stringify(error, null, 2));
     throw new Error(error.error || `HTTP error! status:${response.status}`);
   }
 
