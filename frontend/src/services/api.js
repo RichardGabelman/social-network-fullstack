@@ -84,7 +84,7 @@ export const profileService = {
   },
 
   getFollowing: async (username) => {
-    return fetchWithAuth(`profile/${username}/following`);
+    return fetchWithAuth(`/profile/${username}/following`);
   },
 };
 
