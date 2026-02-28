@@ -40,10 +40,10 @@ function UserCard({ user, onFollowUpdate }) {
       </Link>
 
       <button
-        className={`follow-button ${user.isFollowing ? "following" : ""}`}
-        onClick={() => handleFollowToggle(user.id, user.isFollowing)}
+        className={`follow-button ${isFollowing ? "following" : ""}`}
+        onClick={() => handleFollowToggle()}
       >
-        {user.isFollowing ? "Following" : "Follow"}
+        {isFollowing ? "Following" : "Follow"}
       </button>
     </div>
   );
