@@ -104,8 +104,7 @@
   border: var(--border-primary);
   box-shadow: rgba(0, 0, 0, 0.08) 0px 12px 24px 0px;
   padding-top: 0.5rem;
-  border-top-left-radius: 1.5rem;
-  border-top-right-radius: 1.5rem;
+  border-radius: 1.5rem;
 }
 
 .top-header {

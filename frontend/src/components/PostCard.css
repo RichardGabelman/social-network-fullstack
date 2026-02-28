@@ -5,6 +5,10 @@
   font-size: 0.9375rem;
 }
 
+.post-card:last-child {
+  border-bottom: none;
+}
+
 .post-header {
   position: relative;
   display: flex;
