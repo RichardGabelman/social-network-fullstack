@@ -1,7 +1,6 @@
 .post-page {
   display: flex;
   flex-direction: column;
-  padding-bottom: 3rem;
 }
 
 .reply-form {
