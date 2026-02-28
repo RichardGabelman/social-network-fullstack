@@ -11,7 +11,9 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedFeed, setSelectedFeed] = useState("following");
+  const [selectedFeed, setSelectedFeed] = useState(
+    () => localStorage.getItem("selectedFeed") || "explore",
+  );
   const [showNewPostModal, setShowNewPostModal] = useState(false);
   const { currentUser } = useAuth();
 
@@ -42,13 +44,18 @@ function Home() {
     setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
   };
 
+  const handleFeedChange = (feed) => {
+    setSelectedFeed(feed);
+    localStorage.setItem("selectedFeed", feed);
+  }
+
   if (loading) {
     return (
       <Layout
         showFeedSelector
         title={selectedFeed === "following" ? "Following" : "Explore"}
         selectedFeed={selectedFeed}
-        onFeedChange={setSelectedFeed}
+        onFeedChange={handleFeedChange}
       >
         <div className="loading">Loading feed...</div>
       </Layout>
@@ -60,7 +67,7 @@ function Home() {
       <Layout
         showFeedSelector
         selectedFeed={selectedFeed}
-        onFeedChange={setSelectedFeed}
+        onFeedChange={handleFeedChange}
       >
         <div className="error">Error: {error}</div>
       </Layout>
@@ -72,7 +79,7 @@ function Home() {
       showFeedSelector
       title={selectedFeed === "following" ? "Following" : "Explore"}
       selectedFeed={selectedFeed}
-      onFeedChange={setSelectedFeed}
+      onFeedChange={handleFeedChange}
       onPostCreated={handlePostCreated}
     >
       <div
@@ -90,10 +97,7 @@ function Home() {
             )}
             <span className="trigger-placeholder">What's new?</span>
           </div>
-          <button
-            type="button"
-            className="trigger-post-button"
-          >
+          <button type="button" className="trigger-post-button">
             Post
           </button>
         </div>
