@@ -47,6 +47,7 @@ function Profile() {
 
   useEffect(() => {
     if (profile) {
+      setIsFollowing(profile.isFollowing);
       loadUserPosts(profile.id);
     }
   }, [profile, loadUserPosts]);
