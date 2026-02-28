@@ -1,5 +1,4 @@
 import passport from "../config/passport.js";
-import prisma from "../db/prisma.js";
 
 export function isLoggedIn(req, res, next) {
   passport.authenticate("jwt", { session: false }, (err, user) => {
