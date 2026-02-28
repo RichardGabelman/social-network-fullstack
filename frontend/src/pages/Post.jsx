@@ -18,10 +18,12 @@ function Post() {
   const [replyContent, setReplyContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const postIdInt = parseInt(postId);
+
   const loadPost = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await postService.getPost(parseInt(postId));
+      const data = await postService.getPost(postIdInt);
       setPost(data);
 
       if (data.replyTo && !data.replyTo.isReplyToDeleted) {
@@ -35,7 +37,7 @@ function Post() {
     } finally {
       setLoading(false);
     }
-  }, [postId]);
+  }, [postIdInt]);
 
   useEffect(() => {
     loadPost();
@@ -47,7 +49,7 @@ function Post() {
 
     try {
       setIsSubmitting(true);
-      const newReply = await postService.createPost(replyContent, parseInt(postId));
+      const newReply = await postService.createPost(replyContent, postIdInt);
 
       setPost(prev => ({
         ...prev,
