@@ -93,7 +93,6 @@ function Home() {
           <button
             type="button"
             className="trigger-post-button"
-            onClick={() => setShowNewPostModal(true)}
           >
             Post
           </button>
