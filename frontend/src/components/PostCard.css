@@ -9,6 +9,10 @@
   border-bottom: none;
 }
 
+.post-card:first-child {
+  border-bottom: var(--border-primary);
+}
+
 .post-header {
   position: relative;
   display: flex;
