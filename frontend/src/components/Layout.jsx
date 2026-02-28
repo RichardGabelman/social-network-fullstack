@@ -27,7 +27,7 @@ function Layout({
   };
 
   const handleBack = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   useEffect(() => {
