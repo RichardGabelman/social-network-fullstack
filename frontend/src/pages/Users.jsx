@@ -9,10 +9,6 @@ function Users() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadUsers();
-  }, [loadUsers]);
-
   const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
@@ -24,6 +20,11 @@ function Users() {
       setLoading(false);
     }
   }, []);
+  
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
 
   if (loading) {
     return (
