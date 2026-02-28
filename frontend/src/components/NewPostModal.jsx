@@ -28,8 +28,9 @@ function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) 
   };
 
   const handleKeyDown = (e) => {
+    // If CTRL/CMD + Enter, submit form
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-      handleSubmit();
+      handleSubmit(e);
     }
   };
 
@@ -64,7 +65,6 @@ function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) 
           <button
             type="submit"
             className="primary"
-            onClick={handleSubmit}
             disabled={!content.trim() || isSubmitting}
           >
             {isSubmitting ? "Posting..." : "Post"}
