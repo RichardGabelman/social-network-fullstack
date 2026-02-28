@@ -5,7 +5,8 @@
   font-size: 0.9375rem;
 }
 
-.replies-section .post-card:last-child {
+.replies-section .post-card:last-child,
+.profile-posts .post-card:last-child {
   border-bottom: none;
 }
 
