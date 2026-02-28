@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { userService } from "../services/api";
 import Layout from "../components/Layout.jsx";
 import UserCard from "../components/UserCard.jsx";
@@ -11,9 +11,9 @@ function Users() {
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [loadUsers]);
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     try {
       setLoading(true);
       const data = await userService.getAllUsers();
@@ -23,7 +23,7 @@ function Users() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   if (loading) {
     return (
