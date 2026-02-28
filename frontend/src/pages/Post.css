@@ -4,12 +4,12 @@
 }
 
 .reply-form {
-  position: fixed;
-  bottom: 0;
   padding: 1rem;
-  width: 640px;
-  background-color: rgb(16, 16, 16);
-  border: var(--border-primary);
+  border-bottom: var(--border-primary);
+}
+
+.reply-form-last {
+  border-bottom: none;
 }
 
 .reply-form-content {

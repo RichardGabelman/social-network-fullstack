@@ -115,13 +115,7 @@ function Post() {
           <PostCard post={post} onPostDeleted={handlePostDeleted}/>
         </article>
 
-        <section className="replies-section">
-          {replies.map((reply) => (
-            <PostCard key={reply.id} post={reply} onPostDeleted={handlePostDeleted}/>
-          ))}
-        </section>
-
-        <form className="reply-form" onSubmit={handleReplySubmit}>
+        <form className={`reply-form ${replies.length === 0 ? "reply-form-last" : ""}`} onSubmit={handleReplySubmit}>
            <div className="reply-form-content">
             {currentUser && (
               <Avatar src={currentUser.avatarUrl} alt={currentUser.username} size={"small"} />
@@ -135,6 +129,13 @@ function Post() {
             </button>
            </div>
         </form>
+
+        <section className="replies-section">
+          {replies.map((reply) => (
+            <PostCard key={reply.id} post={reply} onPostDeleted={handlePostDeleted}/>
+          ))}
+        </section>
+
       </article>
     </Layout>
   );
