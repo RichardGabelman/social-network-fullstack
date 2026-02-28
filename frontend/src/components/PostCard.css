@@ -6,7 +6,8 @@
 }
 
 .replies-section .post-card:last-child,
-.profile-posts .post-card:last-child {
+.profile-posts .post-card:last-child,
+.posts-container .post-card:last-child {
   border-bottom: none;
 }
 
