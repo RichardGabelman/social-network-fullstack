@@ -143,6 +143,6 @@
   border-radius: 0.5rem;
 }
 
-.empty-post {
-  padding: 1rem;
+.empty-posts {
+  text-align: center;
 }
