@@ -142,3 +142,7 @@
   font-size: 0.9375rem;
   border-radius: 0.5rem;
 }
+
+.empty-post {
+  padding: 1rem;
+}
