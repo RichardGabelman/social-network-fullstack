@@ -69,13 +69,13 @@
 
 .modal-footer {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
 }
 
-button.primary {
+.modal-submit {
   color: var(--color-text-primary);
   background-color: var(--color-content-background);
   padding: 0.6rem 0.8rem;
@@ -84,9 +84,15 @@ button.primary {
   cursor: pointer;
   font-size: 0.9375rem;
   font-weight: 600;
+  font-family: inherit;
+  transition: opacity 0.2s;
 }
 
-button.primary:disabled {
+.modal-submit:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.modal-submit:disabled {
   border: 1px solid rgba(119, 119, 119, 0.2);
   color: rgba(243, 245, 247, 0.2);
   cursor: not-allowed;

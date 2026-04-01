@@ -64,7 +64,7 @@ function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) 
           <span className="char-count">{content.length}/500</span>
           <button
             type="submit"
-            className="primary"
+            className="modal-submit"
             disabled={!content.trim() || isSubmitting}
           >
             {isSubmitting ? "Posting..." : "Post"}
