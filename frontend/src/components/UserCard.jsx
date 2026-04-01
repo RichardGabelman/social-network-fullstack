@@ -34,14 +34,15 @@ function UserCard({ user, onFollowUpdate }) {
       <Link to={`/profile/${user.username}`} className="user-info">
         <Avatar src={user.avatarUrl} alt={user.username} size="large" />
         <div className="user-details">
-          <p className="username">{user.username}</p>
-          <p className="display-name">{user.displayName}</p>
+          <p className="user-username">{user.username}</p>
+          <p className="user-display-name">{user.displayName}</p>
         </div>
       </Link>
 
       <button
         className={`follow-button ${isFollowing ? "following" : ""}`}
         onClick={() => handleFollowToggle()}
+        disabled={isUpdating}
       >
         {isFollowing ? "Following" : "Follow"}
       </button>
