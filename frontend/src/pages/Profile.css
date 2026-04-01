@@ -1,9 +1,3 @@
-.loading, .error {
-  text-align: center;
-  padding: 2rem;
-  color: var(--color-text-muted);
-}
-
 .profile-container {
   display: flex;
   flex-direction: column;
@@ -113,11 +107,6 @@
 
 .form-group textarea {
   resize: none;
-}
-
-.char-count {
-  display: block;
-  text-align: right;
 }
 
 .edit-profile-modal::backdrop {

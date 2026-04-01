@@ -3,6 +3,10 @@
   --color-content-background: #181818;
   --color-text-primary: rgb(243, 245, 247);
   --color-text-muted: rgba(255, 255, 255, 0.5);
+  --color-text-faint: rgba(243, 245, 247, 0.3);
+  --color-icon-muted: rgb(77, 77, 77);
+  --color-error: rgb(220, 80, 60);
+  --color-error-bg: rgba(220, 80, 60, 0.1);
   --border-primary: 1px solid rgba(243, 245, 247, 0.15);
 }
 
@@ -22,4 +26,31 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.char-count {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
 }

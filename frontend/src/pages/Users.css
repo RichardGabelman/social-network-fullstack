@@ -1,13 +1,3 @@
-.loading, .error {
-  text-align: center;
-  padding: 2rem;
-  color: var(--color-text-primary);
-}
-
-.error {
-  color: orange;
-}
-
 .users-container {
   display: flex;
   flex-direction: column;
