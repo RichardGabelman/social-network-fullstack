@@ -170,7 +170,7 @@
 
 .nav-icon {
   fill: var(--color-icon-muted);
-  width: 2rem;
+  width: 1.6rem;
   transition: fill 0.15s ease;
 }
 
