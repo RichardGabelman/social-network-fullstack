@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { followerService } from "../services/api";
+import { useToast } from "../contexts/ToastContext";
 import Avatar from "./Avatar";
 import "./UserCard.css";
 
 function UserCard({ user, onFollowUpdate }) {
   const [isFollowing, setIsFollowing] = useState(user.isFollowing);
   const [isUpdating, setIsUpdating] = useState(false);
+  const toast = useToast();
 
   const handleFollowToggle = async () => {
     if (isUpdating) return;
@@ -23,7 +25,7 @@ function UserCard({ user, onFollowUpdate }) {
       onFollowUpdate?.();
     } catch (error) {
       console.error("Error toggling follow:", error);
-      alert("Failed to update follow status");
+      toast.error("Failed to update follow status");
     } finally {
       setIsUpdating(false);
     }
@@ -41,7 +43,7 @@ function UserCard({ user, onFollowUpdate }) {
 
       <button
         className={`follow-button ${isFollowing ? "following" : ""}`}
-        onClick={() => handleFollowToggle()}
+        onClick={handleFollowToggle}
         disabled={isUpdating}
       >
         {isFollowing ? "Following" : "Follow"}

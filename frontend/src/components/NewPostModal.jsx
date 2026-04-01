@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { postService } from "../services/api.js";
+import { useToast } from "../contexts/ToastContext.jsx";
 import "./NewPostModal.css";
 
 function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const toast = useToast();
 
   if (!isOpen) return null;
 
@@ -19,9 +21,10 @@ function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) 
       setContent("");
       onClose();
       onPostCreated(newPost);
+      toast.success("Post created");
     } catch (error) {
       console.error("Error creating post:", error);
-      alert("Failed to create post");
+      toast.error("Failed to create post");
     } finally {
       setIsSubmitting(false);
     }

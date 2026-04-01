@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { followerService, postService, profileService } from "../services/api";
 import { useParams } from "react-router-dom";
+import { useToast } from "../contexts/ToastContext";
 import Layout from "../components/Layout";
 import Avatar from "../components/Avatar";
 import PostCard from "../components/PostCard";
@@ -8,6 +9,7 @@ import "./Profile.css";
 
 function Profile() {
   const { username } = useParams();
+  const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +70,7 @@ function Profile() {
       setIsFollowing(!isFollowing);
     } catch (error) {
       console.error("Error toggling follow:", error);
-      alert("Failed to update follow status");
+      toast.error("Failed to update follow status");
     }
   };
 
@@ -83,9 +85,10 @@ function Profile() {
         displayName: editForm.displayName,
         bio: editForm.bio,
       }));
+      toast.success("Profile updated");
     } catch (err) {
       console.error("Error updating profile:", err);
-      alert("Failed to update profile");
+      toast.error("Failed to update profile");
     }
   };
 

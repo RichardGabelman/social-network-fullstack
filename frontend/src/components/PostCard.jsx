@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postService } from "../services/api.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useToast } from "../contexts/ToastContext.jsx";
 import Avatar from "./Avatar.jsx";
 import "./PostCard.css";
 
@@ -63,6 +64,7 @@ function CommentSpeechBubble() {
 function PostCard({ post, onPostDeleted }) {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const toast = useToast();
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post._count.likes);
   const [isLiking, setIsLiking] = useState(false);
@@ -120,18 +122,15 @@ function PostCard({ post, onPostDeleted }) {
     try {
       await postService.deletePost(post.id);
       onPostDeleted?.(post.id);
+      toast.success("Post deleted");
     } catch (error) {
       console.error("Error deleting post:", error);
-      alert("Failed to delete post");
+      toast.error("Failed to delete post");
     }
   };
 
   const handleCardClick = () => {
     navigate(`/post/${post.id}`);
-  };
-
-  const handleAuthorClick = (e) => {
-    e.stopPropagation();
   };
 
   const handleMenuToggle = (e) => {
@@ -158,7 +157,7 @@ function PostCard({ post, onPostDeleted }) {
       <div className="post-layout">
         <Link
           to={`/profile/${post.author.username}`}
-          onClick={handleAuthorClick}
+          onClick={(e) => e.stopPropagation()}
           className="author-link"
         >
           <Avatar
@@ -173,7 +172,7 @@ function PostCard({ post, onPostDeleted }) {
             <div className="author-info">
               <Link
                 to={`/profile/${post.author.username}`}
-                onClick={handleAuthorClick}
+                onClick={(e) => e.stopPropagation()}
                 className="author-link"
               >
                 <p className="post-username">{post.author.username}</p>

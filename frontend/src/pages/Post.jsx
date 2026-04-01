@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useToast } from "../contexts/ToastContext.jsx";
 import Layout from "../components/Layout.jsx";
 import PostCard from "../components/PostCard.jsx";
 import Avatar from "../components/Avatar.jsx";
@@ -11,6 +12,7 @@ function Post() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const toast = useToast();
   const [post, setPost] = useState(null);
   const [parentPost, setParentPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -61,9 +63,10 @@ function Post() {
       }));
 
       setReplyContent("");
+      toast.success("Reply posted");
     } catch (error) {
       console.error("Error creating reply:", error);
-      alert("Failed to post reply");
+      toast.error("Failed to post reply");
     } finally {
       setIsSubmitting(false);
     }
