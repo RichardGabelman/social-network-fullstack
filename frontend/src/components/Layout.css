@@ -15,7 +15,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: 1rem;
 }
 
 .nav-center-bundle {
@@ -188,6 +188,7 @@
 
 .logo svg {
   fill: var(--color-text-primary);
+  width: 2rem;
 }
 
 .back-button {
