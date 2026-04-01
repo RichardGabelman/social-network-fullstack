@@ -55,7 +55,7 @@
   width: 100%;
   background-color: var(--color-content-background);
   border: none;
-  padding: 0.75rem;
+  padding: 1rem 1.5rem;
   color: var(--color-text-primary);
   font-size: 1rem;
   font-family: inherit;
