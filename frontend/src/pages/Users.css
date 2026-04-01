@@ -6,5 +6,5 @@
 .empty-users {
   text-align: center;
   padding: 3rem 1rem;
-  color: var(--color-text-primary);
+  color: var(--color-text-muted);
 }
