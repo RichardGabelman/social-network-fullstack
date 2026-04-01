@@ -74,6 +74,14 @@ function Profile() {
     }
   };
 
+  const handleEditCancel = () => {
+    setShowEditModal(false);
+    setEditForm({
+      displayName: profile.displayName,
+      bio: profile.bio || "",
+    });
+  };
+
   const handleEditSubmit = async (e) => {
     e.preventDefault();
 
@@ -166,7 +174,7 @@ function Profile() {
         {showEditModal && (
           <div
             className="modal-overlay"
-            onClick={() => setShowEditModal(false)}
+            onClick={handleEditCancel}
           >
             <dialog
               open
@@ -212,6 +220,13 @@ function Profile() {
                 </div>
 
                 <footer className="modal-actions">
+                  <button
+                    type="button"
+                    className="modal-cancel"
+                    onClick={handleEditCancel}
+                  >
+                    Cancel
+                  </button>
                   <button type="submit" className="modal-done">
                     Done
                   </button>

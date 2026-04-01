@@ -65,6 +65,9 @@
   font-size: 1rem;
   font-family: inherit;
   resize: none;
+  overflow: hidden;
+  min-height: 4rem;
+  max-height: 80vh;
   margin-bottom: 1rem;
 }
 

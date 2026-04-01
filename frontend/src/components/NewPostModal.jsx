@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { postService } from "../services/api.js";
 import { useToast } from "../contexts/ToastContext.jsx";
+import { useAutoResize } from "../hooks/useAutoResize.js";
 import "./NewPostModal.css";
 
 function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const toast = useToast();
+  const textareaRef = useAutoResize();
 
   if (!isOpen) return null;
 
@@ -51,6 +53,7 @@ function NewPostModal({ isOpen, onClose, variant = "centered", onPostCreated }) 
           <div className="modal-header-spacer"></div>
         </div>
         <textarea
+          ref={textareaRef}
           name="content"
           id="post-content"
           placeholder="What's new?"

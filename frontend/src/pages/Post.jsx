@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { useToast } from "../contexts/ToastContext.jsx";
+import { useAutoResize } from "../hooks/useAutoResize.js";
 import Layout from "../components/Layout.jsx";
 import PostCard from "../components/PostCard.jsx";
 import Avatar from "../components/Avatar.jsx";
@@ -13,6 +14,7 @@ function Post() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const toast = useToast();
+  const replyRef = useAutoResize();
   const [post, setPost] = useState(null);
   const [parentPost, setParentPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -123,7 +125,7 @@ function Post() {
             {currentUser && (
               <Avatar src={currentUser.avatarUrl} alt={currentUser.username} size={"small"} />
             )}
-            <textarea name="content" id="reply-content" placeholder={`Replying to ${post.author.username}`} value={replyContent} onChange={(e) => setReplyContent(e.target.value)} maxLength={500} rows={1} required/>
+            <textarea ref={replyRef} name="content" id="reply-content" placeholder={`Replying to ${post.author.username}`} value={replyContent} onChange={(e) => setReplyContent(e.target.value)} maxLength={500} rows={1} required/>
            </div>
            <div className="reply-form-footer">
             <span className="char-count">{replyContent.length}/500</span>
