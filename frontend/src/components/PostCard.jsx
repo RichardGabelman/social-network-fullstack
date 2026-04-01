@@ -171,7 +171,7 @@ function PostCard({ post, onPostDeleted }) {
                 onClick={handleAuthorClick}
                 className="author-link"
               >
-                <p className="username">{post.author.username}</p>
+                <p className="post-username">{post.author.username}</p>
               </Link>
             </div>
             <div className="meta-info">

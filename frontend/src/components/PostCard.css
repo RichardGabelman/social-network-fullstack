@@ -111,7 +111,7 @@
   text-decoration: underline;
 }
 
-.username {
+.post-username {
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
@@ -121,7 +121,7 @@
 }
 
 .timestamp {
-  color: rgba(243, 245, 247, 0.3);
+  color: var(--color-text-faint);
 }
 
 .post-actions {
