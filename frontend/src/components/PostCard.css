@@ -4,6 +4,11 @@
   padding-bottom: 0.3rem;
   cursor: pointer;
   font-size: 0.9375rem;
+  transition: background-color 0.15s ease;
+}
+
+.post-card:hover {
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 .replies-section .post-card:last-child,
@@ -46,7 +51,7 @@
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: rgb(40, 40, 40);
+  background-color: var(--color-surface-raised);
   border: var(--border-primary);
   border-radius: 1rem;
   min-width: 240px;
@@ -146,6 +151,7 @@
   cursor: pointer;
   min-height: 2.25rem;
   border-radius: 0.75rem;
+  padding: 0.4rem 0.6rem;
 }
 
 .action-button:hover {
