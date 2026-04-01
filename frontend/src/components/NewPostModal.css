@@ -38,6 +38,11 @@
   padding: 0px;
   justify-self: start;
   padding-left: 1.5rem;
+  transition: opacity 0.15s, ease;
+}
+
+.cancel-button:hover {
+  opacity: 0.6;
 }
 
 .modal-header-spacer {
