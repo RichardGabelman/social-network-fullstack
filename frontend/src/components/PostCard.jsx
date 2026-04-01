@@ -70,6 +70,11 @@ function PostCard({ post, onPostDeleted }) {
   const menuRef = useRef(null);
 
   useEffect(() => {
+    setIsLiked(post.isLiked);
+    setLikeCount(post._count.likes);
+  }, [post.isLiked, post._count.likes])
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShowMenu(false);
