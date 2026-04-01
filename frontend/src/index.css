@@ -3,6 +3,7 @@
 :root {
   --color-background: rgb(10, 10, 10);
   --color-content-background: #181818;
+  --color-surface-raised: rgb(40, 40, 40);
   --color-text-primary: rgb(243, 245, 247);
   --color-text-muted: rgba(255, 255, 255, 0.5);
   --color-text-faint: rgba(243, 245, 247, 0.3);
