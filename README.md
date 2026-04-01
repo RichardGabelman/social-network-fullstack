@@ -150,6 +150,7 @@ To get a local copy up and running follow these steps.
    GITHUB_CLIENT_ID="your_github_client_id"
    GITHUB_CLIENT_SECRET="your_github_client_secret"
    GITHUB_CALLBACK_URL="backend_base_url(default is http://localhost:3000)/api/auth/github/callback"
+   CLIENT_ORIGIN="frontend_url(default is http://localhost:5173)"
 ```
 
 4. Run Prisma migrations
