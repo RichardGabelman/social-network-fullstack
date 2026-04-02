@@ -9,9 +9,8 @@ import "./PostCard.css";
 const getTimeAgo = (timestamp) => {
   const now = new Date();
   const posted = new Date(timestamp);
-  const diffInSeconds = Math.floor((now - posted) / 1000);
+  const diffInSeconds = Math.max(Math.floor((now - posted) / 1000), 0);
 
-  if (diffInSeconds < 60) return `${diffInSeconds}s`;
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h`;
   if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d`;
