@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { postService } from "../services/api.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useRequireAuth } from "../hooks/useRequireAuth.js";
 import Layout from "../components/Layout.jsx";
 import NewPostModal from "../components/NewPostModal.jsx";
 import PostCard from "../components/PostCard.jsx";
@@ -12,17 +13,26 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedFeed, setSelectedFeed] = useState(
-    () => localStorage.getItem("selectedFeed") || "explore",
-  );
-  const [showNewPostModal, setShowNewPostModal] = useState(false);
   const { currentUser } = useAuth();
+  const requireAuth = useRequireAuth();
+  const [selectedFeed, setSelectedFeed] = useState(() => {
+    const saved = localStorage.getItem("selectedFeed") || "explore";
+    return saved;
+  });
+  const [showNewPostModal, setShowNewPostModal] = useState(false);
+
+  const handleTriggerClick = () => {
+    if (!requireAuth()) return;
+    setShowNewPostModal(true);
+  };
 
   const loadFeed = useCallback(async () => {
     try {
       setLoading(true);
+      const feedToLoad =
+        selectedFeed === "following" && !currentUser ? "explore" : selectedFeed;
       const data =
-        selectedFeed === "following"
+        feedToLoad === "following"
           ? await postService.getFeed()
           : await postService.getExplorePosts();
       setPosts(data);
@@ -31,7 +41,7 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  }, [selectedFeed]);
+  }, [currentUser, selectedFeed]);
 
   useEffect(() => {
     loadFeed();
@@ -46,9 +56,10 @@ function Home() {
   };
 
   const handleFeedChange = (feed) => {
+    if (feed === "following" && !requireAuth()) return;
     setSelectedFeed(feed);
     localStorage.setItem("selectedFeed", feed);
-  }
+  };
 
   if (loading) {
     return (
@@ -71,7 +82,9 @@ function Home() {
       >
         <div className="error">
           <p>Failed to load feed</p>
-          <button className="retry-button" onClick={loadFeed}>Try again</button>
+          <button className="retry-button" onClick={loadFeed}>
+            Try again
+          </button>
         </div>
       </Layout>
     );
@@ -86,7 +99,7 @@ function Home() {
     >
       <div
         className="new-post-trigger"
-        onClick={() => setShowNewPostModal(true)}
+        onClick={handleTriggerClick}
       >
         <div className="trigger-content">
           <div className="trigger-left">
