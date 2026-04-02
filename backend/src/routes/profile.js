@@ -1,6 +1,6 @@
 import express from "express";
 import prisma from "../db/prisma.js";
-import { isLoggedIn } from "../middlewares/authMiddleware.js";
+import { isLoggedIn, optionalAuth } from "../middlewares/authMiddleware.js";
 import { body, param, validationResult } from "express-validator";
 
 const router = express.Router();
@@ -98,18 +98,18 @@ router.patch(
       console.error("Error updating profile:", error);
       res.status(500).json({ error: "Failed to update profile" });
     }
-  }
+  },
 );
 
 router.get(
   "/:username",
-  isLoggedIn,
+  optionalAuth,
   validateUsername,
   handleValidationErrors,
   async (req, res) => {
     try {
       const { username } = req.params;
-      const currentUserId = req.user.id;
+      const currentUserId = req.user?.id ?? null;
 
       const user = await prisma.user.findUnique({
         where: { username },
@@ -131,6 +131,15 @@ router.get(
 
       if (!user) {
         return res.status(404).json({ error: "User not found" });
+      }
+
+      if (!currentUserId) {
+        return res.status(200).json({
+          ...user,
+          isFollowing: false,
+          followsYou: false,
+          isOwnProfile: false,
+        });
       }
 
       const isFollowing = await prisma.follows.findUnique({
@@ -161,12 +170,12 @@ router.get(
       console.error("Error fetching user profile:", error);
       res.status(500).json({ error: "Failed to fetch profile" });
     }
-  }
+  },
 );
 
 router.get(
   "/:username/followers",
-  isLoggedIn,
+  optionalAuth,
   validateUsername,
   handleValidationErrors,
   async (req, res) => {
@@ -202,12 +211,12 @@ router.get(
       console.error("Error fetching followers:", error);
       res.status(500).json({ error: "Failed to fetch followers" });
     }
-  }
+  },
 );
 
 router.get(
   "/:username/following",
-  isLoggedIn,
+  optionalAuth,
   validateUsername,
   handleValidationErrors,
   async (req, res) => {
@@ -243,7 +252,7 @@ router.get(
       console.error("Error fetching following:", error);
       res.status(500).json({ error: "Failed to fetch following" });
     }
-  }
+  },
 );
 
 export default router;
