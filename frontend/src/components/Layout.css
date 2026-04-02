@@ -91,6 +91,12 @@
   background-color: rgba(255, 255, 255, 0.08);
 }
 
+.nav-bottom-spacer {
+  width: 60px;
+  height: 48px;
+  margin-bottom: 22px;
+}
+
 .center-area {
   position: relative;
   width: 640px;
