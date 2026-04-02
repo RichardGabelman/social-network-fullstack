@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { postService } from "../services/api.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { useToast } from "../contexts/ToastContext.jsx";
+import { useRequireAuth } from "../hooks/useRequireAuth.js";
 import Avatar from "./Avatar.jsx";
 import "./PostCard.css";
 
@@ -64,6 +65,7 @@ function PostCard({ post, onPostDeleted }) {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const toast = useToast();
+  const requireAuth = useRequireAuth();
   const [isLiked, setIsLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post._count.likes);
   const [isLiking, setIsLiking] = useState(false);
@@ -93,6 +95,7 @@ function PostCard({ post, onPostDeleted }) {
 
   const handleLike = async (e) => {
     e.stopPropagation();
+    if (!requireAuth()) return;
     if (isLiking) return;
 
     try {
