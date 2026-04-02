@@ -24,12 +24,18 @@ function Profile() {
   const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await profileService.getProfileByUsername(username);
-      setProfile(data);
+      const profileData = await profileService.getProfileByUsername(username);
+      setProfile(profileData);
+      setIsFollowing(profileData.isFollowing);
       setEditForm({
-        displayName: data.displayName,
-        bio: data.bio || "",
+        displayName: profileData.displayName,
+        bio: profileData.bio || "",
       });
+
+      postService
+        .getUserPosts(profileData.id)
+        .then((postsData) => setPosts(postsData))
+        .catch((err) => console.error("Error loading posts:", err));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -37,25 +43,9 @@ function Profile() {
     }
   }, [username]);
 
-  const loadUserPosts = useCallback(async (userId) => {
-    try {
-      const postsData = await postService.getUserPosts(userId);
-      setPosts(postsData);
-    } catch (err) {
-      console.error("Error loading posts:", err);
-    }
-  }, []);
-
   useEffect(() => {
     loadProfile();
   }, [loadProfile]);
-
-  useEffect(() => {
-    if (profile) {
-      setIsFollowing(profile.isFollowing);
-      loadUserPosts(profile.id);
-    }
-  }, [profile, loadUserPosts]);
 
   const handlePostDeleted = (postId) => {
     setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
@@ -176,10 +166,7 @@ function Profile() {
         </section>
 
         {showEditModal && (
-          <div
-            className="modal-overlay"
-            onClick={handleEditCancel}
-          >
+          <div className="modal-overlay" onClick={handleEditCancel}>
             <dialog
               open
               className="edit-profile-modal"
