@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { followerService, postService, profileService } from "../services/api";
 import { useParams } from "react-router-dom";
 import { useToast } from "../contexts/ToastContext";
@@ -21,31 +21,28 @@ function Profile() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ displayName: "", bio: "" });
 
-  const loadProfile = useCallback(async () => {
-    try {
-      setLoading(true);
-      const profileData = await profileService.getProfileByUsername(username);
-      setProfile(profileData);
-      setIsFollowing(profileData.isFollowing);
-      setEditForm({
-        displayName: profileData.displayName,
-        bio: profileData.bio || "",
-      });
-
-      postService
-        .getUserPosts(profileData.id)
-        .then((postsData) => setPosts(postsData))
-        .catch((err) => console.error("Error loading posts:", err));
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [username]);
-
   useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        setLoading(true);
+        const profileData = await profileService.getProfileByUsername(username);
+        setProfile(profileData);
+        setIsFollowing(profileData.isFollowing);
+        setEditForm({
+          displayName: profileData.displayName,
+          bio: profileData.bio || "",
+        });
+
+        const postsData = await postService.getUserPosts(profileData.id)
+        setPosts(postsData);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     loadProfile();
-  }, [loadProfile]);
+  }, [username]);
 
   const handlePostDeleted = (postId) => {
     setPosts((prevPosts) => prevPosts.filter((p) => p.id !== postId));
