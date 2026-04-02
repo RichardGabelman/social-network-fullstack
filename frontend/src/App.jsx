@@ -24,6 +24,20 @@ function ProtectedRoute({ children }) {
   return currentUser ? children : <Navigate to="/login" />;
 }
 
+function PublicRoute({ children }) {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <Layout>
+        <SkeletonFeed />
+      </Layout>
+    );
+  }
+
+  return children;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -36,33 +50,33 @@ function App() {
             <Route
               path="/"
               element={
-                <ProtectedRoute>
+                <PublicRoute>
                   <Home />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route
               path="/users"
               element={
-                <ProtectedRoute>
+                <PublicRoute>
                   <Users />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route
               path="/profile/:username"
               element={
-                <ProtectedRoute>
+                <PublicRoute>
                   <Profile />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route
               path="/post/:postId"
               element={
-                <ProtectedRoute>
+                <PublicRoute>
                   <Post />
-                </ProtectedRoute>
+                </PublicRoute>
               }
             />
             <Route path="*" element={<Navigate to="/" replace />} />
