@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { followerService, postService, profileService } from "../services/api";
 import { useParams } from "react-router-dom";
 import { useToast } from "../contexts/ToastContext";
+import { useRequireAuth } from "../hooks/useRequireAuth.js";
 import Layout from "../components/Layout";
 import Avatar from "../components/Avatar";
 import PostCard from "../components/PostCard";
@@ -11,6 +12,7 @@ import "./Profile.css";
 function Profile() {
   const { username } = useParams();
   const toast = useToast();
+  const requireAuth = useRequireAuth();
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -60,6 +62,7 @@ function Profile() {
   };
 
   const handleFollowToggle = async () => {
+    if (!requireAuth()) return;
     if (!profile) return;
 
     try {
