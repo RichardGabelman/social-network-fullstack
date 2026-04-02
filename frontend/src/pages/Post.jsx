@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { useToast } from "../contexts/ToastContext.jsx";
 import { useAutoResize } from "../hooks/useAutoResize.js";
+import { useRequireAuth } from "../hooks/useRequireAuth.js";
 import Layout from "../components/Layout.jsx";
 import PostCard from "../components/PostCard.jsx";
 import Avatar from "../components/Avatar.jsx";
@@ -16,6 +17,7 @@ function Post() {
   const { currentUser } = useAuth();
   const toast = useToast();
   const replyRef = useAutoResize();
+  const requireAuth = useRequireAuth();
   const [post, setPost] = useState(null);
   const [parentPost, setParentPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -50,6 +52,7 @@ function Post() {
 
   const handleReplySubmit = async (e) => {
     e.preventDefault();
+    if (!requireAuth()) return;
     if (!replyContent.trim() || isSubmitting) return;
 
     try {
