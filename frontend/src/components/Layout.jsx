@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useRequireAuth } from "../hooks/useRequireAuth.js";
 import NewPostModal from "./NewPostModal.jsx";
 import "./Layout.css";
 
@@ -18,6 +19,7 @@ function Layout({
   const [showCenteredModal, setShowCenteredModal] = useState(false);
   const [showFloatingModal, setShowFloatingModal] = useState(false);
   const { currentUser, logout } = useAuth();
+  const requireAuth = useRequireAuth();
 
   const handleLogout = () => {
     logout();
@@ -80,7 +82,7 @@ function Layout({
           </Link>
           <button
             className="nav-new-post-button nav-item"
-            onClick={() => setShowCenteredModal(true)}
+            onClick={() => { if (requireAuth()) setShowCenteredModal(true); }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +264,7 @@ function Layout({
 
         <button
           className="nav-item-mobile"
-          onClick={() => setShowCenteredModal(true)}
+          onClick={() => { if (requireAuth()) setShowCenteredModal(true); }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -312,7 +314,7 @@ function Layout({
 
       <button
         className="new-post-button"
-        onClick={() => setShowFloatingModal(true)}
+        onClick={() => { if (requireAuth()) setShowFloatingModal(true); }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
