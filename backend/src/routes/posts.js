@@ -175,6 +175,19 @@ router.get("/explore", isLoggedIn, async (req, res) => {
             avatarUrl: true,
           },
         },
+        replyTo: {
+          select: {
+            id: true,
+            content: true,
+            isReplyToDeleted: true,
+            author: {
+              select: {
+                username: true,
+                displayName: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             likes: true,
