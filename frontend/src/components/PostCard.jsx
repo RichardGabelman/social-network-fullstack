@@ -70,12 +70,13 @@ function PostCard({ post, onPostDeleted }) {
   const [likeCount, setLikeCount] = useState(post._count.likes);
   const [isLiking, setIsLiking] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
     setIsLiked(post.isLiked);
     setLikeCount(post._count.likes);
-  }, [post.isLiked, post._count.likes])
+  }, [post.isLiked, post._count.likes]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -86,6 +87,8 @@ function PostCard({ post, onPostDeleted }) {
 
     if (showMenu) {
       document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      setConfirmDelete(false);
     }
 
     return () => {
@@ -116,10 +119,13 @@ function PostCard({ post, onPostDeleted }) {
     }
   };
 
-  const handleDelete = async (e) => {
+  const handleDeleteClick = (e) => {
     e.stopPropagation();
+    setConfirmDelete(true);
+  };
 
-    if (!confirm("Delete this post?")) return;
+  const handleDeleteConfirm = async (e) => {
+    e.stopPropagation();
 
     try {
       await postService.deletePost(post.id);
@@ -195,19 +201,49 @@ function PostCard({ post, onPostDeleted }) {
 
                 {showMenu && (
                   <div className="post-menu-dropdown">
-                    <button
-                      className="post-menu-item delete"
-                      onClick={handleDelete}
-                    >
-                      <span>Delete</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
+                    {confirmDelete ? (
+                      <>
+                        <p className="post-menu-confirm-text">
+                          Delete this post?
+                        </p>
+                        <button
+                          className="post-menu-item delete"
+                          onClick={handleDeleteConfirm}
+                        >
+                          <span>Yes, delete</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                          >
+                            <title>Delete</title>
+                            <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
+                          </svg>
+                        </button>
+                        <button
+                          className="post-menu-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmDelete(false);
+                          }}
+                        >
+                          <span>Cancel</span>
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className="post-menu-item delete"
+                        onClick={handleDeleteClick}
                       >
-                        <title>Delete</title>
-                        <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
-                      </svg>
-                    </button>
+                        <span>Delete</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <title>Delete</title>
+                          <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
+                        </svg>
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
