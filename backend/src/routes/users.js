@@ -1,17 +1,16 @@
 import express from "express";
 import prisma from "../db/prisma.js";
-import { isLoggedIn } from "../middlewares/authMiddleware.js";
+import { optionalAuth } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", isLoggedIn, async (req, res) => {
+router.get("/", optionalAuth, async (req, res) => {
   try {
-    const currentUserId = req.user.id;
+    const currentUserId = req.user?.id ?? null;
 
+    // TODO: Add pagination to users fetch
     const users = await prisma.user.findMany({
-      where: {
-        id: { not: currentUserId },
-      },
+      where: currentUserId ? { id: { not: currentUserId } } : {},
       select: {
         id: true,
         username: true,
@@ -31,13 +30,19 @@ router.get("/", isLoggedIn, async (req, res) => {
       },
     });
 
+    if (!currentUserId) {
+      return res.status(200).json(
+        users.map((user) => ({ ...user, isFollowing: false }))
+      );
+    }
+
     const followingRelationships = await prisma.follows.findMany({
       where: { followerId: currentUserId },
       select: { followingId: true },
     });
 
     const followingIds = new Set(
-      followingRelationships.map((f) => f.followingId)
+      followingRelationships.map((f) => f.followingId),
     );
 
     const usersWithFollowStatus = users.map((user) => ({
