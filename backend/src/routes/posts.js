@@ -71,6 +71,16 @@ router.post(
               avatarUrl: true,
             },
           },
+          replyTo: {
+            select: {
+              id: true,
+              author: {
+                select: {
+                  username: true,
+                },
+              },
+            },
+          },
           _count: {
             select: {
               likes: true,
@@ -198,7 +208,17 @@ router.get("/explore", isLoggedIn, async (req, res) => {
       take: 50,
     });
 
-    res.json(posts);
+    const likedPostIds = await prisma.like.findMany({
+      where: { userId: req.user.id, postId: { in: posts.map((p) => p.id) } },
+      select: { postId: true },
+    });
+    const likedSet = new Set(likedPostIds.map((l) => l.postId));
+    const postsWithLikeStatus = posts.map((post) => ({
+      ...post,
+      isLiked: likedSet.has(post.id),
+    }));
+
+    res.json(postsWithLikeStatus);
   } catch (error) {
     console.error("Error fetching explore posts:", error);
     res.status(500).json({ error: "Failed to fetch posts" });
