@@ -36,7 +36,7 @@
   color: var(--color-text-muted);
   cursor: pointer;
   font-size: 1rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   transition: background-color 0.2s;
   text-align: center;
 }
