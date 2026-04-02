@@ -5,6 +5,7 @@ import { useToast } from "../contexts/ToastContext";
 import Layout from "../components/Layout";
 import Avatar from "../components/Avatar";
 import PostCard from "../components/PostCard";
+import { SkeletonProfile } from "../components/Skeleton.jsx";
 import "./Profile.css";
 
 function Profile() {
@@ -103,7 +104,7 @@ function Profile() {
   if (loading) {
     return (
       <Layout title="Profile" showBackButton>
-        <div className="loading">Loading profile...</div>
+        <SkeletonProfile />
       </Layout>
     );
   }

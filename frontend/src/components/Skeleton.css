@@ -1,0 +1,125 @@
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-content-background);
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.06) 60%,
+    transparent 100%
+  );
+  animation: shimmer-sweep 1.8s infinite;
+}
+
+@keyframes shimmer-sweep {
+  0%   { transform: translateX(-200%); }
+  100% { transform: translateX(200%); }
+}
+
+.skel-line {
+  border-radius: 6px;
+  height: 10px;
+}
+
+.skel-circle {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skel-post-card {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem 0.75rem;
+  border-bottom: var(--border-primary);
+}
+
+.skel-post-card:last-child {
+  border-bottom: none;
+}
+
+.skel-post-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 2px;
+}
+
+.skel-post-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.skel-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: var(--border-primary);
+}
+ 
+.skel-trigger-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.skel-profile-header {
+  padding: 1rem 1.5rem;
+  border-bottom: var(--border-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+ 
+.skel-profile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+ 
+.skel-profile-names {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.skel-user-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: var(--border-primary);
+}
+ 
+.skel-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+ 
+.skel-user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skel-reply-form {
+  padding: 1rem;
+  border-bottom: var(--border-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}

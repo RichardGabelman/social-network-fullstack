@@ -5,6 +5,7 @@ import Layout from "../components/Layout.jsx";
 import NewPostModal from "../components/NewPostModal.jsx";
 import PostCard from "../components/PostCard.jsx";
 import Avatar from "../components/Avatar.jsx";
+import { SkeletonFeed } from "../components/Skeleton.jsx";
 import "./Home.css";
 
 function Home() {
@@ -53,11 +54,10 @@ function Home() {
     return (
       <Layout
         showFeedSelector
-        title={selectedFeed === "following" ? "Following" : "Explore"}
         selectedFeed={selectedFeed}
         onFeedChange={handleFeedChange}
       >
-        <div className="loading">Loading feed...</div>
+        <SkeletonFeed />
       </Layout>
     );
   }
@@ -69,7 +69,10 @@ function Home() {
         selectedFeed={selectedFeed}
         onFeedChange={handleFeedChange}
       >
-        <div className="error">Error: {error}</div>
+        <div className="error">
+          <p>Failed to load feed</p>
+          <button className="retry-button" onClick={loadFeed}>Try again</button>
+        </div>
       </Layout>
     );
   }
@@ -77,7 +80,6 @@ function Home() {
   return (
     <Layout
       showFeedSelector
-      title={selectedFeed === "following" ? "Following" : "Explore"}
       selectedFeed={selectedFeed}
       onFeedChange={handleFeedChange}
       onPostCreated={handlePostCreated}

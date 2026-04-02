@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { userService } from "../services/api";
 import Layout from "../components/Layout.jsx";
 import UserCard from "../components/UserCard.jsx";
+import { SkeletonList } from "../components/Skeleton.jsx";
 import "./Users.css";
 
 function Users() {
@@ -29,7 +30,7 @@ function Users() {
   if (loading) {
     return (
       <Layout title="Users" showBackButton>
-        <div className="loading">Loading users...</div>
+        <SkeletonList />
       </Layout>
     );
   }
@@ -37,7 +38,10 @@ function Users() {
   if (error) {
     return (
       <Layout title="Users" showBackButton>
-        <div className="error">Error: {error}</div>
+        <div className="error">
+          <p>Failed to load users</p>
+          <button className="retry-button" onClick={loadUsers}>Try again</button>
+        </div>
       </Layout>
     );
   }

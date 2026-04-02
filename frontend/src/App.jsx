@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext.jsx";
 import { ToastProvider } from "./contexts/ToastContext.jsx";
+import { SkeletonFeed } from "./components/Skeleton.jsx";
+import Layout from "./components/Layout.jsx";
 import Login from "./pages/Login.jsx";
 import AuthCallback from "./pages/AuthCallback.jsx";
 import Home from "./pages/Home.jsx";
@@ -12,7 +14,11 @@ function ProtectedRoute({ children }) {
   const { currentUser, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Layout>
+        <SkeletonFeed />
+      </Layout>
+    );
   }
 
   return currentUser ? children : <Navigate to="/login" />;

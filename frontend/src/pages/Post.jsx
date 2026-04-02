@@ -6,6 +6,7 @@ import { useAutoResize } from "../hooks/useAutoResize.js";
 import Layout from "../components/Layout.jsx";
 import PostCard from "../components/PostCard.jsx";
 import Avatar from "../components/Avatar.jsx";
+import { SkeletonPost } from "../components/Skeleton.jsx";
 import { postService } from "../services/api.js";
 import "./Post.css";
 
@@ -55,7 +56,7 @@ function Post() {
       setIsSubmitting(true);
       const newReply = await postService.createPost(replyContent, postIdInt);
 
-      setPost(prev => ({
+      setPost((prev) => ({
         ...prev,
         replies: [newReply, ...(prev.replies || [])],
         _count: {
@@ -78,9 +79,9 @@ function Post() {
     if (deletedPostId === post.id) {
       navigate(-1);
     } else {
-      setPost(prev => ({
+      setPost((prev) => ({
         ...prev,
-        replies: prev.replies.filter(r => r.id !== deletedPostId),
+        replies: prev.replies.filter((r) => r.id !== deletedPostId),
         _count: {
           ...prev._count,
           replies: prev._count.replies - 1,
@@ -92,7 +93,7 @@ function Post() {
   if (loading) {
     return (
       <Layout title="Thread" showBackButton>
-        <div className="loading">Loading post...</div>
+        <SkeletonPost />
       </Layout>
     );
   }
@@ -117,30 +118,54 @@ function Post() {
         )}
 
         <article className="main-post">
-          <PostCard post={post} onPostDeleted={handlePostDeleted}/>
+          <PostCard post={post} onPostDeleted={handlePostDeleted} />
         </article>
 
-        <form className={`reply-form ${replies.length === 0 ? "reply-form-last" : ""}`} onSubmit={handleReplySubmit}>
-           <div className="reply-form-content">
+        <form
+          className={`reply-form ${replies.length === 0 ? "reply-form-last" : ""}`}
+          onSubmit={handleReplySubmit}
+        >
+          <div className="reply-form-content">
             {currentUser && (
-              <Avatar src={currentUser.avatarUrl} alt={currentUser.username} size={"small"} />
+              <Avatar
+                src={currentUser.avatarUrl}
+                alt={currentUser.username}
+                size={"small"}
+              />
             )}
-            <textarea ref={replyRef} name="content" id="reply-content" placeholder={`Replying to ${post.author.username}`} value={replyContent} onChange={(e) => setReplyContent(e.target.value)} maxLength={500} rows={1} required/>
-           </div>
-           <div className="reply-form-footer">
+            <textarea
+              ref={replyRef}
+              name="content"
+              id="reply-content"
+              placeholder={`Replying to ${post.author.username}`}
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              maxLength={500}
+              rows={1}
+              required
+            />
+          </div>
+          <div className="reply-form-footer">
             <span className="char-count">{replyContent.length}/500</span>
-            <button type="submit" className="reply-button" disabled={!replyContent.trim() || isSubmitting}>
+            <button
+              type="submit"
+              className="reply-button"
+              disabled={!replyContent.trim() || isSubmitting}
+            >
               {isSubmitting ? "Posting..." : "Reply"}
             </button>
-           </div>
+          </div>
         </form>
 
         <section className="replies-section">
           {replies.map((reply) => (
-            <PostCard key={reply.id} post={reply} onPostDeleted={handlePostDeleted}/>
+            <PostCard
+              key={reply.id}
+              post={reply}
+              onPostDeleted={handlePostDeleted}
+            />
           ))}
         </section>
-
       </article>
     </Layout>
   );
