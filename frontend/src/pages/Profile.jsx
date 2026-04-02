@@ -17,7 +17,6 @@ function Profile() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isFollowing, setIsFollowing] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editForm, setEditForm] = useState({ displayName: "", bio: "" });
 
@@ -27,7 +26,6 @@ function Profile() {
         setLoading(true);
         const profileData = await profileService.getProfileByUsername(username);
         setProfile(profileData);
-        setIsFollowing(profileData.isFollowing);
         setEditForm({
           displayName: profileData.displayName,
           bio: profileData.bio || "",
@@ -53,12 +51,12 @@ function Profile() {
     if (!profile) return;
 
     try {
-      if (isFollowing) {
+      if (profile.isFollowing) {
         await followerService.unfollowUser(profile.id);
       } else {
         await followerService.followUser(profile.id);
       }
-      setIsFollowing(!isFollowing);
+      setProfile(prev => ({...prev, isFollowing: !prev.isFollowing }));
     } catch (error) {
       console.error("Error toggling follow:", error);
       toast.error("Failed to update follow status");
@@ -134,11 +132,11 @@ function Profile() {
             ) : (
               <button
                 className={`profile-follow-button ${
-                  isFollowing ? "profile-following" : ""
+                  profile.isFollowing ? "profile-following" : ""
                 }`}
                 onClick={handleFollowToggle}
               >
-                {isFollowing ? "Following" : "Follow"}
+                {profile.isFollowing ? "Following" : "Follow"}
               </button>
             )}
           </div>
