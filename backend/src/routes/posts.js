@@ -1,6 +1,6 @@
 import express from "express";
 import prisma from "../db/prisma.js";
-import { isLoggedIn } from "../middlewares/authMiddleware.js";
+import { isLoggedIn, optionalAuth } from "../middlewares/authMiddleware.js";
 import { body, param, validationResult } from "express-validator";
 
 const PRISMA_UNIQUE_CONSTRAINT_ERROR = "P2002";
@@ -154,7 +154,7 @@ router.get("/", isLoggedIn, async (req, res) => {
     });
 
     const likedPostIds = await prisma.like.findMany({
-      where: { userId: req.user.id, postId: { in: posts.map((p) => p.id) } },
+      where: { userId, postId: { in: posts.map((p) => p.id) } },
       select: { postId: true },
     });
     const likedSet = new Set(likedPostIds.map((l) => l.postId));
@@ -170,7 +170,7 @@ router.get("/", isLoggedIn, async (req, res) => {
   }
 });
 
-router.get("/explore", isLoggedIn, async (req, res) => {
+router.get("/explore", optionalAuth, async (req, res) => {
   try {
     const posts = await prisma.post.findMany({
       orderBy: {
@@ -208,6 +208,10 @@ router.get("/explore", isLoggedIn, async (req, res) => {
       take: 50,
     });
 
+    if (!req.user) {
+      return res.json(posts.map((post) => ({ ...post, isLiked: false })));
+    }
+
     const likedPostIds = await prisma.like.findMany({
       where: { userId: req.user.id, postId: { in: posts.map((p) => p.id) } },
       select: { postId: true },
@@ -227,7 +231,7 @@ router.get("/explore", isLoggedIn, async (req, res) => {
 
 router.get(
   "/:postId",
-  isLoggedIn,
+  optionalAuth,
   validatePostId,
   handleValidationErrors,
   async (req, res) => {
@@ -292,6 +296,10 @@ router.get(
         return res.status(404).json({ error: "Post not found" });
       }
 
+      if (!req.user) {
+        return res.json({ ...post, isLiked: false });
+      }
+
       const like = await prisma.like.findUnique({
         where: {
           userId_postId: {
@@ -314,7 +322,7 @@ router.get(
 
 router.get(
   "/user/:userId",
-  isLoggedIn,
+  optionalAuth,
   validateUserId,
   handleValidationErrors,
   async (req, res) => {
@@ -323,9 +331,7 @@ router.get(
 
       const posts = await prisma.post.findMany({
         where: { authorId: userId },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: { createdAt: "desc" },
         include: {
           author: {
             select: {
@@ -335,14 +341,22 @@ router.get(
               avatarUrl: true,
             },
           },
-          _count: {
+          replyTo: {
             select: {
-              likes: true,
-              replies: true,
+              id: true,
+              isReplyToDeleted: true,
+              author: {
+                select: { username: true },
+              },
             },
           },
+          _count: { select: { likes: true, replies: true } },
         },
       });
+
+      if (!req.user) {
+        return res.json(posts.map((post) => ({ ...post, isLiked: false })));
+      }
 
       const likedPostIds = await prisma.like.findMany({
         where: { userId: req.user.id, postId: { in: posts.map((p) => p.id) } },
