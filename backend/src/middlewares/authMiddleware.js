@@ -9,3 +9,11 @@ export function isLoggedIn(req, res, next) {
   })(req, res, next);
 }
 
+export function optionalAuth(req, res, next) {
+  passport.authenticate("jwt", { session: false }, (err, user) => {
+    if (err) return next(err);
+    req.user = user || null;
+    next();
+  })(req, res, next);
+}
+
