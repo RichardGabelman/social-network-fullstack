@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { postService } from "../services/api.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { useRequireAuth } from "../hooks/useRequireAuth.js";
@@ -13,6 +13,7 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
   const { currentUser } = useAuth();
   const requireAuth = useRequireAuth();
   const [selectedFeed, setSelectedFeed] = useState(() => {
@@ -26,26 +27,27 @@ function Home() {
     setShowNewPostModal(true);
   };
 
-  const loadFeed = useCallback(async () => {
-    try {
-      setLoading(true);
-      const feedToLoad =
-        selectedFeed === "following" && !currentUser ? "explore" : selectedFeed;
-      const data =
-        feedToLoad === "following"
-          ? await postService.getFeed()
-          : await postService.getExplorePosts();
-      setPosts(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [currentUser, selectedFeed]);
-
   useEffect(() => {
+    const loadFeed = async () => {
+      try {
+        setLoading(true);
+        const feedToLoad =
+          selectedFeed === "following" && !currentUser
+            ? "explore"
+            : selectedFeed;
+        const data =
+          feedToLoad === "following"
+            ? await postService.getFeed()
+            : await postService.getExplorePosts();
+        setPosts(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     loadFeed();
-  }, [loadFeed]);
+  }, [currentUser, selectedFeed, retryCount]);
 
   const handlePostCreated = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
@@ -82,7 +84,10 @@ function Home() {
       >
         <div className="error">
           <p>Failed to load feed</p>
-          <button className="retry-button" onClick={loadFeed}>
+          <button
+            className="retry-button"
+            onClick={() => setRetryCount((c) => c + 1)}
+          >
             Try again
           </button>
         </div>
@@ -97,10 +102,7 @@ function Home() {
       onFeedChange={handleFeedChange}
       onPostCreated={handlePostCreated}
     >
-      <div
-        className="new-post-trigger"
-        onClick={handleTriggerClick}
-      >
+      <div className="new-post-trigger" onClick={handleTriggerClick}>
         <div className="trigger-content">
           <div className="trigger-left">
             {currentUser && (
