@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { followerService } from "../services/api";
-import { useToast } from "../contexts/ToastContext";
-import Avatar from "./Avatar";
+import { followerService } from "../services/api.js";
+import { useToast } from "../contexts/ToastContext.jsx";
+import { useRequireAuth } from "../hooks/useRequireAuth.js";
+import Avatar from "./Avatar.jsx";
 import "./UserCard.css";
 
 function UserCard({ user, onFollowUpdate }) {
   const [isFollowing, setIsFollowing] = useState(user.isFollowing);
   const [isUpdating, setIsUpdating] = useState(false);
   const toast = useToast();
+  const requireAuth = useRequireAuth();
 
   const handleFollowToggle = async () => {
+    if (!requireAuth()) return;
     if (isUpdating) return;
 
     try {
