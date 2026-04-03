@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { useToast } from "../contexts/ToastContext.jsx";
@@ -27,28 +27,32 @@ function Post() {
 
   const postIdInt = parseInt(postId);
 
-  const loadPost = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await postService.getPost(postIdInt);
-      setPost(data);
-
-      if (data.replyTo && !data.replyTo.isReplyToDeleted) {
-        const parent = await postService.getPost(data.replyTo.id);
-        setParentPost(parent);
-      } else {
-        setParentPost(null);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [postIdInt]);
-
   useEffect(() => {
+    if (isNaN(postIdInt)) {
+      setError("Invalid post ID");
+      setLoading(false);
+      return;
+    }
+    const loadPost = async () => {
+      try {
+        setLoading(true);
+        const data = await postService.getPost(postIdInt);
+        setPost(data);
+
+        if (data.replyTo && !data.replyTo.isReplyToDeleted) {
+          const parent = await postService.getPost(data.replyTo.id);
+          setParentPost(parent);
+        } else {
+          setParentPost(null);
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     loadPost();
-  }, [loadPost]);
+  }, [postIdInt]);
 
   const handleReplySubmit = async (e) => {
     e.preventDefault();
