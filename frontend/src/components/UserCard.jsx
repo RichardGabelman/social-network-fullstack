@@ -6,7 +6,7 @@ import { useRequireAuth } from "../hooks/useRequireAuth.js";
 import Avatar from "./Avatar.jsx";
 import "./UserCard.css";
 
-function UserCard({ user, onFollowUpdate }) {
+function UserCard({ user, onFollowChange }) {
   const [isFollowing, setIsFollowing] = useState(user.isFollowing);
   const [isUpdating, setIsUpdating] = useState(false);
   const toast = useToast();
@@ -16,17 +16,22 @@ function UserCard({ user, onFollowUpdate }) {
     if (!requireAuth()) return;
     if (isUpdating) return;
 
+    const originalIsFollowing = isFollowing
+    const newIsFollowing = !isFollowing;
+
+    setIsFollowing(newIsFollowing);
+    onFollowChange?.(user.id, newIsFollowing);
+
     try {
       setIsUpdating(true);
-      if (isFollowing) {
+      if (originalIsFollowing) {
         await followerService.unfollowUser(user.id);
       } else {
         await followerService.followUser(user.id);
       }
-
-      setIsFollowing(!isFollowing);
-      onFollowUpdate?.();
     } catch (error) {
+      setIsFollowing(originalIsFollowing);
+      onFollowChange?.(user.id, originalIsFollowing);
       console.error("Error toggling follow:", error);
       toast.error("Failed to update follow status");
     } finally {
