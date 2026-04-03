@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { userService } from "../services/api";
 import Layout from "../components/Layout.jsx";
 import UserCard from "../components/UserCard.jsx";
@@ -9,23 +9,39 @@ function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [query, setQuery] = useState("");
 
-  const loadUsers = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await userService.getAllUsers();
-      setUsers(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-  
   useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await userService.getAllUsers();
+        setUsers(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     loadUsers();
-  }, [loadUsers]);
+  }, []);
 
+  const handleFollowChange = (userId, isFollowing) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === userId ? { ...u, isFollowing } : u)),
+    );
+  };
+
+  const filteredUsers = query.trim()
+    ? users.filter((u) => {
+        const q = query.toLowerCase();
+        return (
+          u.username.toLowerCase().includes(q) ||
+          (u.displayName && u.displayName.toLowerCase().includes(q))
+        );
+      })
+    : users;
 
   if (loading) {
     return (
@@ -40,7 +56,20 @@ function Users() {
       <Layout title="Users" showBackButton>
         <div className="error">
           <p>Failed to load users</p>
-          <button className="retry-button" onClick={loadUsers}>Try again</button>
+          <button
+            className="retry-button"
+            onClick={() => {
+              setError(null);
+              setLoading(true);
+              userService
+                .getAllUsers()
+                .then((data) => setUsers(data))
+                .catch((err) => setError(err.message))
+                .finally(() => setLoading(false));
+            }}
+          >
+            Try again
+          </button>
         </div>
       </Layout>
     );
@@ -48,14 +77,28 @@ function Users() {
 
   return (
     <Layout title="Users" showBackButton>
+      <div className="users-search">
+        <input
+          type="text"
+          className="users-search-input"
+          placeholder="Search users..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Search users"
+        />
+      </div>
       <div className="users-container">
-        {users.length === 0 ? (
+        {filteredUsers.length === 0 ? (
           <div className="empty-users">
-            <p>No users found.</p>
+            <p>{query.trim() ? "No users match your search." : "No users found."}</p>
           </div>
         ) : (
-          users.map((user) => (
-            <UserCard key={user.id} user={user} onFollowUpdate={loadUsers} />
+          filteredUsers.map((user) => (
+            <UserCard
+              key={user.id}
+              user={user}
+              onFollowChange={handleFollowChange}
+            />
           ))
         )}
       </div>
