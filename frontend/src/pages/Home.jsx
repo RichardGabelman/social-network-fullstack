@@ -27,12 +27,14 @@ function Home() {
     setShowNewPostModal(true);
   };
 
+  const isLoggedIn = !!currentUser;
+
   useEffect(() => {
     const loadFeed = async () => {
       try {
         setLoading(true);
         const feedToLoad =
-          selectedFeed === "following" && !currentUser
+          selectedFeed === "following" && !isLoggedIn
             ? "explore"
             : selectedFeed;
         const data =
@@ -47,7 +49,7 @@ function Home() {
       }
     };
     loadFeed();
-  }, [currentUser, selectedFeed, retryCount]);
+  }, [isLoggedIn, selectedFeed, retryCount]);
 
   const handlePostCreated = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
