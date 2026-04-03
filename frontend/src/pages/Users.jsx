@@ -90,7 +90,9 @@ function Users() {
       <div className="users-container">
         {filteredUsers.length === 0 ? (
           <div className="empty-users">
-            <p>{query.trim() ? "No users match your search." : "No users found."}</p>
+            <p>
+              {query.trim() ? "No users match your search." : "No users found."}
+            </p>
           </div>
         ) : (
           filteredUsers.map((user) => (
