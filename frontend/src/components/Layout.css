@@ -91,10 +91,17 @@
   background-color: rgba(255, 255, 255, 0.08);
 }
 
-.nav-bottom-spacer {
-  width: 60px;
-  height: 48px;
+.login-button {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-icon-muted);
   margin-bottom: 22px;
+  border-radius: 0.8rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.login-button span {
+  font-size: 1rem;
 }
 
 .center-area {
