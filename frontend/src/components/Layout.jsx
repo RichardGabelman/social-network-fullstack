@@ -329,15 +329,12 @@ function Layout({
       </button>
 
       <NewPostModal
-        isOpen={showFloatingModal}
-        onClose={() => setShowFloatingModal(false)}
-        variant="floating"
-        onPostCreated={onPostCreated}
-      />
-      <NewPostModal
-        isOpen={showCenteredModal}
-        onClose={() => setShowCenteredModal(false)}
-        variant="centered"
+        isOpen={showCenteredModal || showFloatingModal}
+        onClose={() => {
+          setShowCenteredModal(false);
+          setShowFloatingModal(false)
+        }}
+        variant={showFloatingModal ? "floating" : "centered"}
         onPostCreated={onPostCreated}
       />
     </div>
