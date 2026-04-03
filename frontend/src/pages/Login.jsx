@@ -1,16 +1,18 @@
 import { authService } from "../services/api.js";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
+  const { currentUser, loading } = useAuth();
 
   useEffect(() => {
-    if (authService.isAuthenticated()) {
+    if (!loading && currentUser) {
       navigate("/");
     }
-  }, [navigate]);
+  }, [currentUser, loading, navigate]);
 
   const handleGitHubLogin = () => {
     authService.loginWithGithub();
@@ -30,6 +32,7 @@ function Login() {
           </svg>
           Continue with GitHub
         </button>
+        <Link to="/" className="guest-link">Continue as guest</Link>
       </div>
     </div>
   );
