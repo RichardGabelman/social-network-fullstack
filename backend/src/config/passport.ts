@@ -1,8 +1,9 @@
 import passport from "passport";
-import { Strategy as GithubStrategy } from "passport-github2";
+import { Strategy as GithubStrategy, Profile } from "passport-github2";
 import prisma from "../db/prisma.js";
-import { Strategy as JwtStrategy } from "passport-jwt";
+import { Strategy as JwtStrategy, VerifiedCallback} from "passport-jwt";
 import { ExtractJwt } from "passport-jwt";
+import { JwtPayload } from "jsonwebtoken";
 
 passport.use(
   new GithubStrategy(
@@ -12,15 +13,9 @@ passport.use(
       callbackURL: process.env.GITHUB_CALLBACK_URL,
     },
     async (
-      accessToken: any,
-      refreshToken: any,
-      profile: {
-        id: any;
-        username: any;
-        displayName: any;
-        bio: any;
-        photos: { value: any }[];
-      },
+      _accessToken: string,
+      _refreshToken: string,
+      profile: Profile,
       done: Function,
     ) => {
       try {
@@ -34,7 +29,7 @@ passport.use(
               githubId: profile.id,
               username: profile.username,
               displayName: profile.displayName || profile.username,
-              bio: profile.bio || null,
+              bio: (profile as any).bio || null,
               avatarUrl: profile.photos?.[0]?.value || null,
             },
           });
@@ -54,7 +49,10 @@ const jwtOptions = {
 };
 
 passport.use(
-  new JwtStrategy(jwtOptions, async function (jwt_payload, done: Function) {
+  new JwtStrategy(jwtOptions, async function (
+    jwt_payload: JwtPayload,
+    done: VerifiedCallback,
+  ) {
     try {
       const user = await prisma.user.findUnique({
         where: {
