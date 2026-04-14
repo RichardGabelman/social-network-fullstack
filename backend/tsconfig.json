@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "esnext",
+    "types": ["node"],
+    "strict": false, // remove when done refactoring to ts
+    "skipLibCheck": true,
+    "noEmit": true
+  }
+}
