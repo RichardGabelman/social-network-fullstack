@@ -5,7 +5,11 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.ts",
+    "dev": "tsx watch dist/app.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "rm -rf dist && tsc",
+    "start": "node dist/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +17,6 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
-    "@types/express": "^5.0.6",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
@@ -27,6 +30,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.3.0",
+    "@types/express": "^5.0.6",
     "@types/node": "^25.6.0",
     "@types/passport": "^1.0.17",
     "@types/passport-github2": "^1.2.9",
