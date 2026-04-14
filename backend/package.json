@@ -6,7 +6,7 @@
   "main": "app.js",
   "scripts": {
     "seed": "node prisma/seed.ts",
-    "dev": "tsx watch dist/app.ts",
+    "dev": "tsx watch app.ts",
     "typecheck": "tsc --noEmit",
     "build": "rm -rf dist && tsc",
     "start": "node dist/app.ts"
@@ -36,6 +36,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-jwt": "^4.0.1",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }
 }
