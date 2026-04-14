@@ -73,7 +73,7 @@
 
 ## About The Project
 
-[![DevThreads Screen Shot][product-screenshot]](images/screenshot.png)
+[![DevThreads Screen Shot][product-screenshot]](images/page_screenshot.png)
 
 <p>
   Social platforms like Threads are something most developers use daily but rarely think about
