@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import apiRouter from "./src/routes/api.js";
 
@@ -17,7 +17,7 @@ app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
 });
 
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
   res.status(err.statusCode || 500).json({ error: err.message });
 });
