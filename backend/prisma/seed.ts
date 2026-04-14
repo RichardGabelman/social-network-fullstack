@@ -1,11 +1,12 @@
 import prisma from "../src/db/prisma.js";
+import type { User, Post } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 import "dotenv/config";
 
 const USER_COUNT = 12;
 const POSTS_PER_USER = 5;
 
-function randomDate(daysAgo) {
+function randomDate(daysAgo: number): Date {
   const date = new Date();
   date.setDate(date.getDate() - (Math.floor(Math.random() * daysAgo) + 1));
   date.setHours(Math.floor(Math.random() * 24));
@@ -16,7 +17,7 @@ function randomDate(daysAgo) {
 async function main() {
   console.log("Seeding...");
 
-  const users = []
+  const users: User[] = []
 
   for (let i = 0; i < USER_COUNT; i++) {
     const username = faker.internet.username();
@@ -51,7 +52,7 @@ async function main() {
 
   console.log("Created follow relationships");
 
-  const posts = [];
+  const posts: Post[] = [];
   for (const user of users) {
     for (let i = 0; i < POSTS_PER_USER; i++) {
       const post = await prisma.post.create({
