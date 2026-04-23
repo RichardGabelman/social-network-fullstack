@@ -3,7 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import apiRouter from "./src/routes/api.js";
 
-
 const app = express();
 
 app.use(express.json());
@@ -22,7 +21,14 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.statusCode || 500).json({ error: err.message });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Social Media API - listening on port ${PORT}!`);
-});
+export default app;
+if (
+  process.argv[1] &&
+  new URL(process.argv[1], import.meta.url).pathname ===
+    new URL(import.meta.url).pathname
+) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Social Media API - listening on port ${PORT}!`);
+  });
+}
