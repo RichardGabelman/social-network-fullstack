@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config({ path: ".env.test" });
 import prisma from "../../db/prisma.js";
 import jwt from "jsonwebtoken";
 
@@ -10,16 +8,22 @@ export async function resetDatabase() {
   await prisma.user.deleteMany();
 }
 
-export async function createTestUser(overrides: {
-  username?: string;
-  displayName?: string;
-  githubId?: string;
-} = {}) {
+export async function createTestUser(
+  overrides: {
+    username?: string;
+    displayName?: string;
+    githubId?: string;
+  } = {},
+) {
   return prisma.user.create({
     data: {
-      username: overrides.username ?? `user_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      username:
+        overrides.username ??
+        `user_${Date.now()}_${Math.random().toString(36).slice(2)}`,
       displayName: overrides.displayName ?? "Test User",
-      githubId: overrides.githubId ?? `gh_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+      githubId:
+        overrides.githubId ??
+        `gh_${Date.now()}_${Math.random().toString(36).slice(2)}`,
     },
   });
 }
