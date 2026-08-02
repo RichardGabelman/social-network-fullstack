@@ -11,8 +11,8 @@
     "build": "rm -rf dist && tsc",
     "start": "node dist/app.js",
     "test": "vitest run",
-    "test:watch": "vitetest",
-    "test:coverage": "vitetest run --coverage"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
