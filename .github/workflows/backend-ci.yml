@@ -19,6 +19,10 @@ jobs:
         working-directory: backend
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/devthreads_test
+      GITHUB_CLIENT_ID: test-client-id
+      GITHUB_CLIENT_SECRET: test-client-secret
+      GITHUB_CALLBACK_URL: http://localhost:3000/api/auth/callback/github
+      JWT_SECRET: test-jwt-secret
     services:
       postgres:
         image: postgres:16
